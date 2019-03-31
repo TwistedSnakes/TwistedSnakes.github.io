@@ -1,0 +1,47 @@
+#content-body .banner {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow-x: hidden;
+    
+    background-color: #e2f0fe;
+}
+
+#content-body .banner-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+#content-body .banner-img {
+    position: absolute;
+    top: 0px;
+    height: 100%;
+    transform: translateX(-50%);
+}
+
+#content-body .social-panel .icon-container {
+    max-width: 25vw;
+}
+
+#content-body .social-panel .panel-name-link {
+    color: black;
+}
+
+#content-body .social-panel .panel-name-link:hover {
+    color: black;
+}
+
+#content-body .block-dark .social-panel .panel-name-link {
+    color: white;
+}
+
+#content-body .block-dark .social-panel .panel-name-link:hover {
+    color: white;
+}
+
+#content-body .social-panel .panel-description {
+    font-size: 15px;
+}

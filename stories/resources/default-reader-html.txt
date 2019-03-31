@@ -1,0 +1,3 @@
+paragraph-break = <br>
+segment-break = <br><hr><br>
+title-break = <hr><br>

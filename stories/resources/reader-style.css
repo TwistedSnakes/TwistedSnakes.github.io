@@ -1,0 +1,163 @@
+#age-restricted-panel {
+    margin: 0;
+    width: calc(100vw - 16px);
+    height: calc(100vh - 16px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#age-restricted-panel .img-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+}
+
+#age-restricted-panel img {
+    max-width: 200px;
+}
+
+#age-restricted-panel h1 {
+    margin-bottom: 10px;
+
+    font-family: 'Lato', sans-serif;
+    font-size: 24px;
+    line-height: 1.5em;
+}
+
+#age-restricted-panel h2 {
+    margin: 10px 0;
+
+    font-family: 'Lato', sans-serif;
+    font-size: 20px;
+    line-height: 1.5em;
+}
+
+#age-restricted-panel p {
+    margin: 0;
+
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    line-height: 1.5em;
+}
+
+#age-restricted-panel .age-restricted-container {
+    max-width: 650px;
+}
+
+#age-restricted-panel .container-bottom-padding {
+    height: 200px;
+}
+
+/* Checkbox label */
+#age-restricted-panel .checkbox-container {
+    display: block;
+    position: relative;
+    padding-top: 1.5px;
+    padding-left: 35px;
+    margin-top: 20px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    text-align: left;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Remove default checkbox */
+#age-restricted-panel .checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Custom checkbox */
+#age-restricted-panel .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    
+    height: 20px;
+    width: 20px;
+
+    border: black solid 2px;
+    border-radius: 2px;
+    background-color: white;
+}
+
+#age-restricted-panel .checkbox-container:hover input ~ .checkmark {
+    background-color: #DDDDDD;
+}
+
+#age-restricted-panel .checkbox-container input:checked ~ .checkmark {
+    background-color: white;
+}
+
+#age-restricted-panel .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+#age-restricted-panel .checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+#age-restricted-panel .checkbox-container .checkmark:after {
+    left: 7px;
+    top: 2px;
+
+    width: 5px;
+    height: 10px;
+    
+    border: solid #000000;
+    border-width: 0 2px 2px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+#age-restricted-panel .button-container {
+    margin-top: 20px;
+
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+#age-restricted-panel .button {
+    width: 140px;
+    height: 30px;
+    line-height: 29px;
+    background-color: #003475;
+    display: inline-block;
+    align-content: center;
+    border-radius: 4px;
+
+    color: white;
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    text-align: center;
+
+    cursor: pointer;
+}
+
+#age-restricted-panel .button:hover {
+    background-color: #002354;
+}
+
+#age-restricted-panel .button.disabled, .button.disabled:hover {
+    color: #4f4f4f;
+    background-color: #001733;
+    cursor: default;
+}

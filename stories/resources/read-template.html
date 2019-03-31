@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>${escape_quotes(storyMetadata['title'])}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- Basic Metadata -->
+    <meta name="description" content="${escape_quotes(storyMetadata['teaser'])}"/>
+    <meta name="keywords" content="TwistedSnakes, Decro, story, ${escape_quotes(', '.join(storyMetadata['tags']))}"/>
+    <meta name="language" content="english"/>
+    <meta name="copyright" content="TwistedSnakes"/>
+    <meta name="distribution" content="global"/>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://twistedsnakes.com/"/>
+    <meta property="og:title" content="${escape_quotes(storyMetadata['title'])}"/>
+    <meta property="og:description" content="${escape_quotes(storyMetadata['teaser'])}">
+
+    <!-- Twitter -->
+    <meta property="twitter:url" content="https://twistedsnakes.com/"/>
+    <meta property="twitter:title" content="${escape_quotes(storyMetadata['title'])}"/>
+    <meta property="twitter:description" content="${escape_quotes(storyMetadata['teaser'])}"/>
+
+    <link rel="stylesheet" type="text/css" href="../resources/reader-style.css">
+
+    <script src="/lib/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript">
+        var storyMetadata = ${json.dumps(storyMetadata)};
+    </script>
+    <script src="../resources/reader-utils.js"></script>
+    <script src="../resources/reader-script.js"></script>
+</head>
+<body class="page">
+    <div id="story-form"></div>
+    <div class="story-info-container" style="display: none;">
+        <div class="story-info-scroll-container">
+            <div class="story-info">                
+            </div>
+        </div>
+    </div>
+    <div id="info-toggle-button">
+        <div class="icon"></div>
+    </div>
+</body>
+</html>

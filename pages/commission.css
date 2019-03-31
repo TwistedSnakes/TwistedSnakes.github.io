@@ -1,0 +1,188 @@
+#content-body .banner {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow-x: hidden;
+    
+    background-position: center;
+    background-size: cover;
+}
+
+#content-body .banner-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+#content-body .banner-img {
+    position: absolute;
+    top: 0px;
+    height: 100%;
+    transform: translateX(-50%);
+}
+
+#content-body .info-table {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#content-body .info-table-cell-label,
+#content-body .info-table-cell-content {
+    box-sizing: border-box;
+    flex-grow: 1;
+    overflow: hidden;
+    list-style: none;
+    vertical-align: middle;
+    border-radius: 5px;
+    margin: 4px 0;
+    padding: 10px 15px;
+}
+
+#content-body .info-table-cell-label p,
+#content-body .info-table-cell-content p {
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+#content-body .info-table-cell-label {
+    width: 200px;
+    max-width: 200px;
+
+    color: var(--text-color-light);
+    background-color: var(--primary-color-dark);
+}
+
+#content-body .block-dark .info-table-cell-label {
+    color: var(--primary-color-dark);
+    background-color: white;
+}
+
+#content-body .info-table-cell-content {
+    min-width: calc(90% - 200px);
+}
+
+@media all and (max-width: 500px) {
+    #content-body .price-table  {
+        display: block;
+    }
+
+    #content-body .price-table .price-table-cell-label,
+    #content-body .price-table .price-table-cell-cell {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    #content-body .price-table .price-table-cell-cell {
+        padding: 2px 15px;
+    }
+}
+
+#content-body .content-list-panel p {
+    margin: 0;
+    text-align: center;
+}
+
+#content-body .content-list-panel > div {
+    display: block;
+
+    height: calc(100% - 12px - 12px);
+
+    margin: 12px 0;
+    padding: 0px 18px 30px 18px;
+
+    background: transparent;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+}
+
+#content-body .block-dark .content-list-panel > div {
+    border-color: white;
+}
+
+#content-body .content-list-panel > div > div:first-child {
+    padding: 40px;
+}
+#content-body .content-list-panel .panel-icon {
+    background-color: var(--primary-color-dark);
+    -webkit-mask-size: 100%;
+    mask-size: 100%;
+}
+
+#content-body .block-dark .content-list-panel .panel-icon {
+    background-color: white;
+}
+
+#content-body .tnc-list {
+    padding-left: 24px;
+}
+
+#content-body .tnc-list li {
+    padding: 8px 0px 8px 8px;
+}
+
+#content-body .feedback-list-row {
+    margin: -15px 0 0 -30px !important;
+}
+
+#content-body .feedback-list-panel p {
+    margin: 0;
+    text-align: center;
+}
+
+#content-body .feedback-list-panel > div {
+    display: block;
+
+    height: calc(100% - 6px - 6px);
+
+    margin: 6px 0;
+    padding: 16px 30px;
+
+    background: transparent;
+    border: black solid 1px;
+    border-radius: 5px;
+}
+
+#content-body .block-dark .feedback-list-panel > div {
+    display: block;
+
+    height: calc(100% - 6px - 6px);
+
+    margin: 6px 0;
+    padding: 16px 30px;
+
+    background: transparent;
+    border-color: white;
+    border-radius: 5px;
+}
+
+#content-body .feedback-list-panel > div > div:first-child {
+    margin-bottom: 20px;
+}
+
+#content-body .feedback-list-panel > div > div:first-child p {
+    text-align: left;
+    font-size: 15px;
+}
+
+#content-body .feedback-list-panel > div > div:nth-child(2) {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#content-body .feedback-list-panel > div > div:nth-child(2) p {
+    width: 100%;
+
+    text-align: right;
+    font-size: 14px;
+    font-style: italic;
+
+    opacity: 0.7;
+}
+
+#content-body .block-dark .feedback-list-panel > div > div:nth-child(2) p {
+    opacity: 0.9;
+}

@@ -1,0 +1,18 @@
+{
+    "id": "template",
+    "title": "Title",
+    "upload_date": "2019-01-01T00:00:00+0000",
+    "word_count": 0,
+    "is_age_restricted": true,
+    "teaser": "",
+    "summary": "",
+    "commissioners": [],
+    "authors": ["TwistedSnakes"],
+    "illustrators": [],
+    "tags": [],
+    "display_tags": [],
+    "prefix_text": "",
+    "suffix_text": "",
+    "data": {},
+    "is_listed": true
+}

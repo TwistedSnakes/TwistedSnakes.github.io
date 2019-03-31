@@ -1,0 +1,94 @@
+#content-body .banner {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow-x: hidden;
+    
+    background-color: #e2f0fe;
+}
+
+#content-body .banner-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+#content-body .banner-img {
+    position: absolute;
+    top: 0px;
+    height: 100%;
+    transform: translateX(-50%);
+}
+
+#content-body .story-info-box {
+    background-color: var(--primary-color-light);
+    border-radius: 5px;
+    margin: 4px 0;
+    padding: 16px 30px;
+}
+
+#content-body .story-info-box:first-child {
+    margin-top: 0;
+}
+
+#content-body .story-info-box:last-child {
+    margin-bottom: 0;
+}
+
+#content-body .story-info-box .story-title,
+#content-body .story-info-box .story-teaser,
+#content-body .story-info-box .story-tags,
+#content-body .story-info-box .story-wordcount {
+    margin: 0;
+}
+
+#content-body .story-info-box .story-title {
+    margin-bottom: 10px;
+
+    font-family: 'Raleway', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+#content-body .story-info-box .story-title-link {
+    color: #606060; /* Make this a bit darker than normal links */
+}
+
+#content-body .story-info-box .story-teaser {
+    font-size: 16px;
+    font-style: italic;
+    text-align: justify;
+    line-height: 1.2em;
+
+    margin-bottom: 14px;
+}
+
+#content-body .story-info-box .ellipsis-overflow {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#content-body .story-info-box .story-tags,
+#content-body .story-info-box .story-wordcount {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#content-body .story-info-box .story-tags-text,
+#content-body .story-info-box .story-wordcount-text {
+    font-weight: normal;
+}
+
+#content-body .no-story-info-box {
+    background-color: var(--primary-color-light);
+    border-radius: 5px;
+    margin: 4px 0;
+    padding: 32px 30px;
+}
+
+#content-body .no-story-info-box p {
+    margin: 0;
+}

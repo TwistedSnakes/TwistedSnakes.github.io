@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>The Twisted Writer</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:100|Lato" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        /*
+            Checkbox display
+        */
+
+        /* Checkbox label */
+        .checkbox-container {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            
+            font-family: 'Lato', sans-serif;
+            font-size: 15px;
+            text-align: left;
+
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Remove default checkbox */
+        .checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        /* Custom checkbox */
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            border-radius: 2px;
+            background-color: #333333;
+        }
+
+        .checkbox-container:hover input ~ .checkmark {
+            background-color: #CCCCCC;
+        }
+
+        .checkbox-container input:checked ~ .checkmark {
+            background-color: #FFFFFF;
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .checkbox-container input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        .checkbox-container .checkmark:after {
+            left: 7px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid #000000;
+            border-width: 0 2px 2px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+
+        /*
+            Button display
+        */
+
+        .button {
+            width: 140px;
+            height: 25px;
+            line-height: 25px;
+            background-color: #FFFFFF;
+            display: inline-block;
+            border-radius: 2px;
+
+            color: black;
+            font-family: 'Lato', sans-serif;
+            font-size: 15px;
+            text-align: center;
+        }
+
+        .button:hover {
+            background-color: #CCCCCC;
+        }
+
+        .button.disabled, .button.disbled:hover {
+            display: none;
+            background-color: #333333;
+        }
+    </style>
+    <style>
+        body {
+            background-color: #000000;
+            color: #FFFFFF;
+            text-align: center;
+        }
+
+        .body-container {
+            display: inline-block;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .container {
+            padding: 40px 10px 40px 10px;
+        }
+
+        #top-margin {
+            height: 25vh;
+        }
+
+        .fade-in {
+            display: none !important; 
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 30px;
+            font-family: 'Raleway', sans-serif;
+            margin: 10px 0px 10px 0px;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 15px;
+            font-family: 'Raleway', sans-serif;
+            font-style: italic;
+            color: #CCCCCC;
+            margin: 2px 0px 2px 0px;
+            padding: 6px 0px 0px 0px;
+        }
+
+        #settings-container label.tab-heading {
+            font-size: 20px;
+            font-family: 'Raleway', sans-serif;
+        }
+
+        #title-container a {
+            color: #CCCCCC;
+            text-decoration: none;
+        }
+
+        #title-container a:visited {
+            color: #CCCCCC;
+        }
+
+        #title-container a:hover {
+            color: #FFFFFF;
+        }
+
+        #settings-container {
+            width: 100%;
+            text-align: center;
+            max-width: 274px;
+            display: inline-block;
+        }
+
+        #settings-container label {
+            font-size: 15px;
+            font-family: 'Lato', sans-serif;
+            margin: 12px 0px 12px 0px;
+        }
+
+        #settings-kinks, .character-container {
+            text-align: left;
+            padding: 15px;
+        }
+
+        .character-container {
+            border: 2px;
+            border-style: solid;
+            border-color: #FFFFFF;
+            border-radius: 5px;
+
+            margin: 15px 0px 15px 0px;
+        }
+
+        #settings-characters .character-container label {
+            display: inline-block;
+            width: 60px;
+            margin: 5px 0px 5px 0px;
+        }
+
+        #settings-characters .character-container input {
+            margin-left: 20px;
+            height: 20px;
+            border: none;
+            border-radius: 2px;
+            width: 144px;
+
+            padding: 0px 8px 0px 8px;
+            font-size: 15px;
+            font-family: 'Lato', sans-serif;
+        }
+
+        #settings-characters .character-container select {
+            background-color: #FFFFFF;
+            margin-left: 20px;
+            height: 20px;
+            border: none;
+            border-radius: 2px;
+            width: 160px;
+
+            padding: 0px 8px 0px 8px;
+            font-size: 15px;
+            font-family: 'Lato', sans-serif;
+        }
+
+        #settings-characters .character-container .remove-character-btn {
+            margin: 10px 0px 0px 0px;
+        }
+
+        .generate-story-btn.button {
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            color: white;
+            background-color: #28a745;
+        }
+
+        .generate-story-btn.button:hover {
+            background-color: #218838;
+        }
+
+        #loader-loop {
+            animation: rotation 1.5s infinite linear;
+            -webkit-animation: rotation 1.5s infinite linear;
+        }
+
+        @keyframes rotation {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(359deg);
+            }
+        }
+
+        p {
+            font-family: 'Lato', sans-serif;
+            font-size: 15px;
+            line-height: 20px;
+            text-align: left;
+            padding: "0px 10px 0px 10px";
+        }
+    </style>
+    <script>
+        var NO_ANIMATIONS=!1,MIN_CHARACTER_COUNT=2,MAX_CHARACTER_COUNT=10,LOADING_DELAY=5e3,INITIAL_PARAGRAPHS_COUNT=10,TEXT_TITLE="The Twisted Writer",TEXT_SUBTITLES=['AI scripted by <a href="https://www.furaffinity.net/user/twistedsnakes/" target="_blank">TwistedSnakes</a>.','Training data provided by <a href="https://www.furaffinity.net/user/kerac/" target="_blank">Kerac</a>, <a href="https://www.furaffinity.net/user/tanorath-drgn/" target="_blank">Tano\'rath</a>, and <a href="https://www.furaffinity.net/user/twistedsnakes/" target="_blank">TwistedSnakes</a>.'],DEFAULT_NAMES_MALE=["Aaron","Adam","Adrian","Aiden","Alexander","Andrew","Angel","Anthony","Asher","Austin","Ayden","Benjamin","Brayden","Bryson","Caleb","Cameron","Carson","Carter","Charles","Chase","Christian","Christopher","Colton","Connor","Cooper","Daniel","David","Dominic","Dylan","Easton","Eli","Elias","Elijah","Ethan","Evan","Ezekiel","Ezra","Gabriel","Gavin","Grayson","Greyson","Henry","Hudson","Hunter","Ian","Isaac","Isaiah","Jace","Jack","Jackson","Jacob","James","Jameson","Jason","Jaxon","Jaxson","Jayden","Jeremiah","John","Jonathan","Jordan","Jose","Joseph","Joshua","Josiah","Julian","Kayden","Landon","Leo","Leonardo","Levi","Liam","Lincoln","Logan","Lucas","Luke","Mason","Mateo","Matthew","Maverick","Michael","Nathan","Nicholas","Noah","Nolan","Oliver","Owen","Parker","Robert","Roman","Ryan","Samuel","Santiago","Sawyer","Sebastian","Theodore","Thomas","William","Wyatt","Xavier"],DEFAULT_NAMES_FEMALE=["Aaliyah","Abigail","Addison","Adeline","Alexa","Alice","Allison","Amelia","Anna","Aria","Ariana","Arianna","Aubree","Aubrey","Audrey","Aurora","Autumn","Ava","Avery","Bella","Brooklyn","Camila","Caroline","Charlotte","Chloe","Claire","Clara","Cora","Eleanor","Elena","Eliana","Elizabeth","Ella","Ellie","Emilia","Emily","Emma","Eva","Evelyn","Everly","Gabriella","Genesis","Gianna","Grace","Hailey","Hannah","Harper","Hazel","Isabella","Isabelle","Julia","Kaylee","Kennedy","Kinsley","Layla","Leah","Lillian","Lily","Lucy","Luna","Lydia","Mackenzie","Madeline","Madelyn","Madison","Maya","Melanie","Mia","Mila","Naomi","Natalie","Nevaeh","Nora","Nova","Olivia","Paisley","Penelope","Peyton","Piper","Quinn","Reagan","Riley","Ruby","Sadie","Samantha","Sarah","Savannah","Scarlett","Serenity","Skylar","Sofia","Sophia","Stella","Valentina","Victoria","Violet","Vivian","Willow","Zoe","Zoey"],DEFAULT_SPECIES=["Bird","Cat","Cheetah","Deer","Dog","Dragon","Eagle","Fox","Horse","Human","Hyena","Lion","Lizard","Mouse","Rabbit","Raccoon","Shark","Snake","Tiger","Wolf"],SETTINGS_KINKS=["Bondage","Latex/Rubber","Leather","Chastity","Breathplay","Impact Play","Tickling","Watersports"],SETTINGS_GENDER=["Male","Female","Cuntboy","Dickgirl","Male Hermaphrodite","Female Hermaphrodite","Genderfluid"],SETTINGS_PRONOUNS=["He","She","Them","It","Co","En","Ey","Xie","Yo","Ze","Ve"];function initializeSplash(){var e=$("<h1>").attr("id","title").css("display","none").html(TEXT_TITLE);$("#title-container").append(e),fadeIn(e,4e3);for(var a=0;a<TEXT_SUBTITLES.length;a++){var r=$("<h2>").css("display","none").html(TEXT_SUBTITLES[a]);$("#title-container").append(r),fadeIn(r,4e3,250*(a+1))}fadeIn("#settings-container",2e3,1e3+250*TEXT_SUBTITLES.length)}function initializeSettingOptions(){SETTINGS_KINKS.forEach(function(e,a){$("#settings-kinks").append('<label class="checkbox-container">'+e+'                <input type="checkbox" option-name="'+e+'"'+(0==a?' checked="checked"':"")+'>                <span class="checkmark"></span>            </label>')}),SETTINGS_GENDER.forEach(function(e){$("#template-character-container .character-gender").append('<option value ="'+e+'">'+e+"</option>")}),SETTINGS_PRONOUNS.forEach(function(e){$("#template-character-container .character-pronoun").append('<option value ="'+e+'">'+e+"</option>")})}function fadeIn(e,a,r,t){fade("fadeIn",e,a,r,t)}function fadeOut(e,a,r,t){fade("fadeOut",e,a,r,t)}function fade(e,a,r,t,o){NO_ANIMATIONS&&(r=0,t=0),null==r&&(r=500),null==t&&(t=0),null==o&&(o=function(){}),setTimeout(function(){$(a)[e](r,o)},t)}function addCharacterContainer(){if(!(countCharacterContainers()>=MAX_CHARACTER_COUNT)){var e=$($("#template-character-container").html());$("#settings-characters").append(e);var a=SETTINGS_GENDER[Math.random()<.5?0:1],r="Male"==a?"He":"She",t="Male"==a?DEFAULT_NAMES_MALE[Math.floor(Math.random()*DEFAULT_NAMES_MALE.length)]:DEFAULT_NAMES_FEMALE[Math.floor(Math.random()*DEFAULT_NAMES_FEMALE.length)],o=DEFAULT_SPECIES[Math.floor(Math.random()*DEFAULT_SPECIES.length)];e.find(".character-name").val(t),e.find(".character-gender").val(a),e.find(".character-pronoun").val(r),e.find(".character-species").val(o),e.find(".remove-character-btn").click(removeCharacterContainer),updateCharacterContainers()}}function removeCharacterContainer(){countCharacterContainers()<=MIN_CHARACTER_COUNT||($(this).closest(".character-container").remove(),updateCharacterContainers())}function countCharacterContainers(){return $("#settings-characters .character-container").length}function updateCharacterContainers(){var e=countCharacterContainers();e<=MIN_CHARACTER_COUNT?($(".add-character-btn").removeClass("disabled"),$(".remove-character-btn").addClass("disabled")):e>=MAX_CHARACTER_COUNT?($(".add-character-btn").addClass("disabled"),$(".remove-character-btn").removeClass("disabled")):($(".add-character-btn").removeClass("disabled"),$(".remove-character-btn").removeClass("disabled"))}function retrieveStoryKinks(){var e=["Vanilla"];return $("#settings-kinks input:checked").each(function(a,r){e.push(r.getAttribute("option-name"))}),e}function retrieveStoryCharacters(){var e=[];return $("#settings-characters .character-container").each(function(a,r){var t=$(r);e.push({name:t.find(".character-name").val(),gender:t.find(".character-gender").val(),pronoun:t.find(".character-pronoun").val(),species:t.find(".character-species").val()})}),e}var paragraphGenerator=function*(){}();function fetchContext(){return createStoryContext(retrieveStoryCharacters(),retrieveStoryKinks())}function generateStory(){var e=fetchContext();paragraphGenerator=createParagraphGenerator(e),setStoryTitle(generateTitle(e));for(var a=0;a<INITIAL_PARAGRAPHS_COUNT;a++)addNewParagraph();$("html, body").animate({scrollTop:0},NO_ANIMATIONS?0:500),fadeOut("#settings-container",500),fadeIn("#loader-container",500),setTimeout(function(){fadeOut("#title-container",500),fadeOut("#loader-container",500),fadeIn("#story-title-container",2e3,500),fadeIn("#story-container",2e3,1500),$(window).scroll(function(){$(document).height()-$(window).scrollTop()<2*$(window).height()&&addNewParagraph()})},NO_ANIMATIONS?0:LOADING_DELAY)}function setStoryTitle(e){$("#story-title").text(e)}function addNewParagraph(){var e=paragraphGenerator.next();if(!e.done){var a=e.value,r=$("<p>");r.html(a),$("#story-container").append(r)}}function drawLoadingLoop(){var e=document.getElementById("loader-loop").getContext("2d");e.beginPath(),e.lineWidth=10,e.strokeStyle="#FFFFFF",e.lineCap="round",e.arc(50,50,40,0,13*Math.PI/10),e.stroke()}function generateTitle(e){return refreshStoryContext(e),toTitleCase(parseStructure(pickRandom(allTitles),e))}function createParagraphGenerator(e){return function*(){refreshStoryContext(e);for(var a=pickRandom(storyIntroductions).map(a=>parseStructure(a,e)),r=0;r<a.length;r++)yield a[r];for(;;){var t=4+Math.floor(5*Math.random()),o=[];for(r=0;r<t;r++){refreshStoryContext(e);for(var s=void 0;null==s;)s=parseStructure(s=pickFromProbabilityMap(e.sentence_structures),e);s=capitalizeFirstCharacterOfSentences(s),o.push(s)}yield o.join(" ")}yield"<br>",yield"<hr>",yield'<div style="text-align: center;"><p style="display: inline-block;">~ End ~</p></div>'}()}function debugStructure(e,a){a||(a=1);for(var r=fetchContext(),t=0;t<a;t++){refreshStoryContext(r);var o=parseStructure(e,r);o.indexOf(".")>-1&&(o=capitalizeFirstCharacterOfSentences(o)),1==a?console.log(o):console.log(t+1,o)}}function parseStructure(e,a){for(var r=findStructureTags(e);r.length>0;){for(var t=0;t<r.length;t++){var o=r[t],s=resolveKey(o.slice("<%".length,-">".length),a);if(null==s)return void console.error("Unable to resolve structure: "+JSON.stringify(e));e=e.replace(o,s)}r=findStructureTags(e)}return e}function findStructureTags(e){return Array.from(new Set(e.match(/<%[^>]*?>/g)))}function resolveKey(e,a){for(var r=e.split("."),t=a,o=a,s=0;s<r.length;s++){var n=r[s];if(null==(t="$"==n?t instanceof Array?pickRandom(t):pickFromProbabilityMap(t):"@s"==n?getCharacterPronoun(t,"subject"):"@o"==n?getCharacterPronoun(t,"object"):"@p"==n?getCharacterPronoun(t,"possessive"):"@i"==n?getCharacterPronoun(t,"independent_possessive"):"@r"==n?getCharacterPronoun(t,"reflexive"):"!title_case"==n?toTitleCase(t):"!lower_case"==n?t.toLowerCase():"!upper_case"==n?t.toUpperCase():"!proper_case"==n?capitalizeFirstCharacter(t.toLowerCase()):"!possessive"==n?addPossessive(t):t[n]))return void console.error("Unable to find key: ",e," in context",a);"character"==t._type&&(o=Object.assign({},o,{current_character:t}))}return t=parseStructure(t="string"==typeof t?t:JSON.stringify(t),o)}function joinAnd(e){return 0==e.length?"":1==e.length?e[0]:2==e.length?e[0]+" and "+e[1]:e.slice(0,e.length-1).join(", ")+", and "+e[e.length-1]}function capitalizeFirstCharacterOfSentences(e){var a=e.split(/\. /g);return(a=a.filter(e=>e.length>0).map(capitalizeFirstCharacter)).join(". ")}function capitalizeFirstCharacter(e){return 0==e.length?"":e.slice(0,1).toUpperCase()+e.slice(1)}function toTitleCase(e){var a=new Set(["a","an","and","at","but","by","for","in","into","is","nor","of","on","onto","or","so","the","to","yet"]);return e.toLowerCase().split(" ").map(function(e,r){return a.has(e)&&0!=r?e:capitalizeFirstCharacter(e)}).join(" ")}function addPossessive(e){return e+"'"+("s"!=e.charAt(e.length-1).toLowerCase()?"s":"")}function getCharacterPronoun(e,a){if("subject"==a){if(0==(r=Math.floor(3*Math.random())))return e.name;if(1==r)return"the "+e.species;if(2==r)return e.pronoun.subject}else if("object"==a){if(0==(r=Math.floor(3*Math.random())))return e.name;if(1==r)return"the "+e.species;if(2==r)return e.pronoun.object}else if("possessive"==a){if(0==(r=Math.floor(3*Math.random())))return addPossessive(e.name);if(1==r)return"the "+addPossessive(e.species);if(2==r)return e.pronoun.possessive}else if("independent_possessive"==a){var r;if(0==(r=Math.floor(3*Math.random())))return addPossessive(e.name);if(1==r)return"the "+addPossessive(e.species);if(2==r)return e.pronoun.independent_possessive}else if("reflexive"==a)return e.pronoun.reflexive}$(document).ready(function(){initializeSettingOptions(),initializeSplash(),drawLoadingLoop(),$(".add-character-btn").click(addCharacterContainer);for(var e=0;e<MIN_CHARACTER_COUNT;e++)addCharacterContainer();updateCharacterContainers(),$(".generate-story-btn").click(generateStory)});var RARE_PROBABILITY=.01;function pickRandom(e){return e[Math.floor(Math.random()*e.length)]}function pickRandomN(e,a){return shuffle(e),null==a||a>=e.length?e:e.slice(0,a-e.length)}function shuffle(e){for(var a=e.length;a>0;){var r=Math.floor(Math.random()*a--),t=e[a];e[a]=e[r],e[r]=t}return e}function mergeProbabilityMaps(){for(var e=Object.assign({},arguments[0]),a=1;a<arguments.length;a++){var r=arguments[a];Object.keys(r).forEach(function(a){e[a]=a in e?r[a]+e[a]:r[a]})}return e}function pickFromProbabilityMap(e){var a=Object.keys(e),r=0;a.forEach(function(a){r+=e[a]});for(var t=Math.random()*r,o=0;o<a.length;o++){var s=a[o];if(t<e[s])return s;t-=e[s]}}function createStoryContext(e,a){var r={_characters:e,_kinks:a};return generateCharacters(r),generateSentenceStructures(r),generateObjects(r),generateWords(r),refreshStoryContext(r),r}function refreshStoryContext(e){e.character=e._characters.slice(0),shuffle(e.character)}function generateCharacters(e){for(var a=0;a<e._characters.length;a++){var r=e._characters[a];r._type="character",r._pronoun=r.pronoun,r._gender=r.gender,r._species=r.species.toLowerCase(),r.species=r._species,r.pronoun=PRONOUNS[r._pronoun],generateCharacterBodyParts(e,r)}var t=e._characters.slice(0);shuffle(t),e.all_names=joinAnd(t.map(e=>e.name))}function generateCharacterBodyParts(e,a){var r=a.species,t=a._gender,o=e._kinks,s={face:1,chest:1,hips:1,torso:1,thighs:1,"back of <%current_character.@s> head":1,back:1,"you-know-what":RARE_PROBABILITY,ears:RARE_PROBABILITY,feet:1,palms:.5,palm:.5,hand:1},n={fingers:1,toe:RARE_PROBABILITY},i={"<%word.mouth.$>":1,nostril:RARE_PROBABILITY,ear:RARE_PROBABILITY,"<%word.anus.$>":1};["Male","Dickgirl","Male Hermaphrodite","Female Hermaphrodite","Genderfluid"].includes(t)&&(s=mergeProbabilityMaps(s,{bulge:1,"<%word.penis.$>":1}),n=mergeProbabilityMaps(n,{"<%word.penis.$>":1})),["Male","Dickgirl","Male Hermaphrodite","Female Hermaphrodite","Genderfluid"].includes(t)&&!["aquatic","fish","shark","whale","dolphin","orca","dragon","drake","hydra","wyvern","snake","serpent","cobra","viper","anaconda","python","scalie","lizard","komodo dragon"].includes(r)&&(s=mergeProbabilityMaps(s,{"<%word.testes.$>":1}),n=mergeProbabilityMaps(n,{"<%word.testes.$>":RARE_PROBABILITY})),["Female","Dickgirl","Female Hermaphrodite","Genderfluid"].includes(t)&&(s=mergeProbabilityMaps(s,{"<%word.breasts.$>":1}),n=mergeProbabilityMaps(n,{"<%word.breasts.$>":RARE_PROBABILITY})),["Female","Cuntboy","Male Hermaphrodite","Female Hermaphrodite","Genderfluid"].includes(t)&&(["avian","bird","eagle","falcon","raven","crow","owl","swallow","pigeon","dove"].includes(r)?(s=mergeProbabilityMaps(s,{cloaca:1,"dick-acceptance agency":RARE_PROBABILITY}),i=mergeProbabilityMaps(i,{cloaca:1,"dick-acceptance agency":RARE_PROBABILITY})):(s=mergeProbabilityMaps(s,{"<%word.vagina.$>":1,"<%word.vagina.$> lips":1,"dick-acceptance agency":RARE_PROBABILITY}),i=mergeProbabilityMaps(i,{"<%word.vagina.$>":1,"dick-acceptance agency":RARE_PROBABILITY}))),["Male","Cuntboy","Male Hermaphrodite","Genderfluid"].includes(t)&&(s=mergeProbabilityMaps(s,{abs:1})),["avian","bird","eagle","falcon","raven","crow","owl","swallow","pigeon","dove"].includes(r)&&(s=mergeProbabilityMaps(s,{beak:1,feathers:1,wing:1,talons:1,tail:1}),n=mergeProbabilityMaps(n,{beak:1,wing:1,talons:1}),i=mergeProbabilityMaps(i,{beak:1})),["aquatic","fish","shark","whale","dolphin","orca"].includes(r)&&(s=mergeProbabilityMaps(s,{fin:1,scales:1,gills:1}),n=mergeProbabilityMaps(n,{fin:.3})),["dragon","drake","hydra","wyvern"].includes(r)&&(s=mergeProbabilityMaps(s,{horns:1,wings:1,tail:1,scales:1,fins:1,claws:1,plates:1}),n=mergeProbabilityMaps(n,{horn:1,tail:1}),i=mergeProbabilityMaps(i,{snout:1})),["snake","serpent","cobra","viper","anaconda","python"].includes(r)&&(s=mergeProbabilityMaps(s,{scales:1,tail:1}),n=mergeProbabilityMaps(n,{tail:1})),["scalie","lizard","komodo dragon"].includes(r)&&(s=mergeProbabilityMaps(s,{tail:1,claws:1}),n=mergeProbabilityMaps(n,{tail:1,claw:RARE_PROBABILITY})),["canine","dog","wolf","bulldog","doberman","poodle","german shepherd","labrador","golden retriever","husky","feline","cat","lion","tiger","cheetah","panther","tabby","lupine","fox"].includes(r)&&(s=mergeProbabilityMaps(s,{muzzle:1}),n=mergeProbabilityMaps(n,{muzzle:1})),["lion"].includes(r)&&(s=mergeProbabilityMaps(s,{mane:1})),"human"!=r&&(s=mergeProbabilityMaps(s,{tailhole:.5}),i=mergeProbabilityMaps(i,{tailhole:.5})),o.includes("Bondage")&&(s=mergeProbabilityMaps(s,{"rope-bound body":1,"gagged mouth":1,"harnessed body":1,"harnessed head":1})),o.includes("Latex/Rubber")&&(s=mergeProbabilityMaps(s,{"latex-clad <%word.butt.$>":1,"latex-clad body":1,"suited body":1})),o.includes("Leather")&&(s=mergeProbabilityMaps(s,{"leather-clad <%word.butt.$>":1,"leather-clad body":1})),o.includes("Chastity")&&(s=mergeProbabilityMaps(s,{"rope-bound body":1,"gagged mouth":1,"harnessed body":1,"harnessed head":1})),o.includes("Breathplay")&&(s=mergeProbabilityMaps(s,{"hooded face":1})),o.includes("Impact Play")&&(n=mergeProbabilityMaps(n,{"back of <%current_character.@p> hand":1,"palm of <%current_character.@p> hand":1,"the concrete pathway down the road":RARE_PROBABILITY})),o.includes("Tickling")&&(s=mergeProbabilityMaps(s,{"sensitive feet":.5,"sensitive armpits":.5,"sensitive neck":.5,"sensitive crotch":.5,"ticklish feet":.5,"ticklish armpits":.5,"ticklish neck":.5,"ticklish crotch":.5})),a.touchable=s,a.giving=n,a.receiving=i}function generateSentenceStructures(e){var a=e._kinks,r={};a.includes("Vanilla")&&(r=mergeProbabilityMaps(r,{"<%character.0.@p> grabbed <%character.1.pronoun.possessive> <%character.1.touchable.$> with <%character.0.pronoun.possessive> hand and lightly squeezed.":1,"<%character.0.name> moaned. Why was <%character.0.pronoun.subject> so horny today?":1,"Fluids emerged from <%character.0.@p> <%character.0.receiving.$>.":1,"<%character.0.@p> put <%character.0.pronoun.possessive> <%character.0.giving.$> into <%character.1.@p> <%character.1.receiving.$>.":1,"<%character.0.@p> put the <%object.giving.$> into <%character.1.@p> <%character.1.receiving.$>.":1,"<%character.0.name> presented <%character.1.name> with <%object.giving.$> and <%word.smiled.$>.":1,"<%character.0.@s> <%word.touched.$> <%character.0.pronoun.possessive> <%character.0.touchable.$> in anticipation.":1,"<%character.0.@s> <%word.touched.$> <%character.1.@p> <%character.1.touchable.$> in anticipation.":1,"Licking <%character.0.pronoun.possessive> lips, <%character.0.@s> <%word.touched.$> <%character.1.@p> <%character.1.touchable.$> in anticipation.":1,"<%character.0.@s> <%word.inserted.$> <%character.0.pronoun.possessive> <%character.0.giving.$> into <%character.1.@p> quivering <%character.1.receiving.$>.":1,"<%character.0.@s> could feel <%character.0.pronoun.possessive> <%word.arousal.$> begin to rise.":1,"<%character.0.@s> could feel <%character.0.pronoun.possessive> <%word.arousal.$> begin to rise as they continued, faster and faster.":1,"<%character.0.@s> looked into <%character.1.@p> eyes and they stared at each other, lost in the moment.":1,"<%character.0.@s> stared at <%character.1.@p> with a dazed look on <%character.0.pronoun.possessive> face. <%character.0.pronoun.subject>":1,"<%character.0.@s> <%word.touched.$> <%character.0.pronoun.possessive> <%character.0.touchable.$> tenderly.":1,"<%character.0.@s> <%word.touched.$> <%character.1.@p> <%character.1.touchable.$> tenderly.":1,"<%character.0.@s> <%word.touched.$> <%character.1.@p> <%character.1.touchable.$> in smooth, stroking motions.":1,"<%character.0.@s> <%word.touched.$> <%character.1.@p> <%character.1.touchable.$> with a hungry look in <%character.0.pronoun.possessive> eyes.":1,"The pleasure was getting more and more incredible.":1,"The heat in the room was rising.":1,"<%character.0.@p> head was filled with bliss as <%character.1.@s> carried on without any signs of stopping.":1,"<%character.0.@s> vision was filled with splotches of colour as the room faded away.":1,"<%character.0.@s> climaxed, shooting <%character.0.pronoun.possessive> fluids across the room.":.2,"<%character.0.@s> climaxed, shooting <%character.0.pronoun.possessive> fluids onto the bed.":.5,"<%character.0.@s> climaxed, shooting <%character.0.pronoun.possessive> fluids into <%character.1.@p> face.":.3,"<%character.0.@s> continued <%word.touched.$> <%character.1.@p> <%character.1.touchable.$>.":1,"<%character.0.@s> revealed <%character.0.pronoun.possessive> <%character.0.giving.$>.":1,"<%character.0.@s> whipped out <%character.0.pronoun.possessive> <%character.0.giving.$> enthusiastically.":1,"More shiny pre emerged from <%character.0.@p> sensitive privates.":1,"<%character.0.@s> felt tension build up in <%character.0.pronoun.possessive> groin.":1,"As one of <%character.0.@p> hand stroked <%character.0.pronoun.possessive> privates, the other supported <%character.0.pronoun.object> as <%character.0.pronoun.subject> leaned back and threw <%character.0.pronoun.possessive> head backwards.":1,"<%character.0.@p> mouth was half-open and <%character.0.pronoun.possessive> tongue was hanging out.":1,"The urge to cum was rising.":1,"<%character.0.@s> shuddered as <%character.0.pronoun.subject> came, <%character.0.pronoun.possessive> fluids splashing across <%character.0.pronoun.possessive> skin.":1,"<%character.0.@s> shuddered as <%character.0.pronoun.subject> came, <%character.0.pronoun.possessive> fluids splashing across <%character.1.@p> <%character.1.touchable.$>.":1})),a.includes("Bondage")&&(r=mergeProbabilityMaps(r,{"With the ropes in the room, <%character.0.@s> began the knot tying in ernest with <%character.1.@s> eagerly presenting <%character.1.pronoun.possessive> limbs to be bound.":1,"<%character.0.@s> trembled as <%character.1.@s> used <%character.1.pronoun.object> like a toy.":1,"<%character.0.@s> trembled as <%character.0.pronoun.subject> knelt down in front of <%character.1.@s>, ready to serve.":1})),a.includes("Latex/Rubber")&&(r=mergeProbabilityMaps(r,{"<%character.0.name> pulled out a <%word.latex.$> suit and began donning it, tossing another at <%character.1.name>.":1,"<%all_names> laid close, the material squeaking as they embraced each other.":1,"<%character.0.name> tugged at the latex, smirking as he advanced.":1,"The material on <%character.0.pronoun.possessive> squeaked against <%character.1.pronoun.possessive> own suit as he huddled in up close, savouring the sensation of the suits hugging their forms.":1,"A slight squeak filled the air as <%character.0.@s> ran <%character.0.pronoun.possessive> hand down <%character.0.pronoun.possessive> body, chuckling at the pleasurable sound.":1})),a.includes("Leather")&&(r=mergeProbabilityMaps(r,{"<%character.1.name> held up the straps, giving <%character.0.@p> ample opportunity to enjoy the scent of the leather.":1,"<%character.1.@p> tightened the leather straps, pinning <%character.0.name> onto the bed.":1})),a.includes("Chastity")&&(r=mergeProbabilityMaps(r,{'<%character.0.@s> dangled a cage before <%character.1.@s>, winking and pointing to <%character.1.@p> nethers. "Lets spice things up!"':1,"<%character.0.@s> pushed at <%character.1.@p> <%character.1.giving.$>, holding one hand at the cage and the other at the base of <%character.1.pronoun.possessive> shaft as <%character.0.pronoun.possessive> slowly ground it further and further in, compressing it into the metal.":1,"<%character.0.@s> could feel <%character.0.pronoun.possessive> <%character.1.giving.$> getting squished together, bits of the flesh pushing out past the gaps in the rings of the chastity device. <%character.0.@s> growled, trying to shake <%character.0.pronoun.possessive> head as <%character.0.pronoun.subject> endured the pain.":1,"<%character.0.@p> <%character.0.giving.$> throbbed, some arousal forced into it, but not enough for <%character.0.pronoun.object> to break through.":1,"Just enough for <%character.0.@o> to feel uncomfortable in the cage, getting a little too big for it, a little too swollen to be entirely comfortable inside the metal.":1,"<%character.0.@p> <%character.0.giving.$> throbbed in the metal cage, unable to swell and push upwards, but that didn’t stop it from trying to push against the cage.":1,"It was hard for <%character.0.@s> to rest on the bed as <%character.0.pronoun.subject> grinded <%character.0.pronoun.possessive> crotch against the sheets, holding <%character.0.pronoun.possessive> hands together to keep from groping <%character.0.pronoun.possessive> chastity cage.":1,"<%character.0.@s> worked quickly, slipping the cage down on the <%character.0.@p> <%character.0.giving.$>.":1,"<%character.0.@s> pushed the cage all the way down to the base of <%character.1.@p> <%character.1.giving.$>.":1,"<%character.0.@p> hips were twitching slightly, and <%character.0.pronoun.possessive> <%character.0.giving.$> squeezed through the front of its cage as it fought against its steel restraints":1})),a.includes("Breathplay")&&(r=mergeProbabilityMaps(r,{"<%character.0.@s> held on to the valve, refusing to let <%character.1.@o> breathe.":1,"<%character.0.@s> could feel <%character.0.pronoun.possessive> vision slipping away as the oxygen drained from <%character.0.pronoun.possessive> lungs.":1,"<%character.0.@s> choked as <%character.1.@s> squeezed <%character.0.pronoun.possessive> neck, forcing <%character.0.pronoun.object> to gasp in futile for air.":1,"The pleasure of breathlessness filled <%character.0.@p> head, sending <%character.0.pronoun.object> into a world of bliss.":1,"<%character.0.@p> <%word.arousal.$> was immense as the lightheadedness got to <%character.0.@o>":1})),a.includes("Impact Play")&&(r=mergeProbabilityMaps(r,{"<%character.0.@s> slapped <%character.1.@p> <%character.1.touchable.$>.":1,"<%character.0.@s> pounded <%character.1.@p> <%character.1.touchable.$> with a smile on <%character.0.pronoun.possessive> face.":1,"<%character.0.@s> smacked <%character.1.@p> <%character.0.touchable.$>, hard enough to make a crack echo out throughout the room":1,"The first smack lashed out over <%character.0.@p> <%character.0.touchable.$>, just at the middle of the left cheek.":1,"There was a smack followed by a loud yelp. Then another one, another yelp from <%character.0.@o> as two red marks bloomed along <%character.0.pronoun.possessive> <%character.0.touchable.$>.":1,"The cracking of the tip against <%character.0.pronoun.possessive> <%character.0.touchable.$> and <%character.0.pronoun.possessive> <%character.0.touchable.$> made <%character.0.@s> scream, <%character.0.pronoun.possessive> yelps turning into shrieks in short order.":1})),a.includes("Tickling")&&(r=mergeProbabilityMaps(r,{"<%character.0.@s> dragged a finger across <%character.1.@p> <%character.1.touchable.$>.":1,"<%character.0.@p> huffed, holding back giggles as <%character.1.name> continued.":1,"<%character.0.@s> blushed as <%character.1.@p> fingers almost seemed to dance along the head of <%character.0.@p> <%character.0.touchable.$>, all at once tickling and teasing <%character.0.pronoun.object>.":1,"Tickling fingers went up and down <%character.0.@s> arches, the points of <%character.1.@p> narrow fingers digging into <%character.0.@s> soles constantly, adding that tiny bit of pain to the constant tickles, poking and stroking and wiggling constantly.":1,"<%character.0.@s> kept tickling <%character.1.@o>, dragging <%character.0.pronoun.possessive> fingers up to <%character.1.@p> toes and then down to <%character.1.pronoun.possessive> heels,":1,"As soon as <%character.0.@p> sole touched down, <%character.0.@s> felt the tickling, soft touch of feathers along the bottom of <%character.0.pronoun.possessive> foot.":1,"It felt like fingers digging into <%character.0.@p> arch, wiggling and tickling <%character.0.@s> like possessed hands; others were like little needles getting dragged up and down <%character.0.pronoun.possessive> soles, making <%character.0.pronoun.object> giggle and shiver at the same time.":1,"The tickles mounted up faster and faster.":1,"<%character.0.@s> twitched a bit, fighting the urge to giggle at the increasingly ticklish feeling.":1,"<%character.0.@s> opened <%character.0.pronoun.possessive> mouth with laughter escaping as the tickles got under <%character.0.pronoun.possessive> toes.":1,"<%character.0.@s> giggled and snorted, gasping for breath as <%character.0.pronoun.possessive> sides started to ache from the constant laughing.":1})),a.includes("Watersports")&&(r=mergeProbabilityMaps(r,{"<%character.0.@s> pulled <%character.1.@o> close to <%character.0.pronoun.possessive> crotch. <%character.1.@s> quivered as the scent of the <%character.0.species> filled <%character.1.@p> nose. <%character.0.@s> let out a stream of golden liquid into <%character.1.@p> <%character.1.receiving.$>.":1,"Without warning, <%character.0.@s> let a stream of piss, drentching <%character.0.@o> with it.":1,"<%character.0.@s> was immediately soaked in <%character.1.@p> urine.":1,"<%character.0.@s> could not hold it in any longer. With a loud gasp, <%character.0.pronoun.subject> let out a glorious stream of piss. ":1,"<%character.0.@p> crotch shivered, and before <%character.0.pronoun.subject> knew it, <%character.0.pronoun.subject> was pissing all over the bed.":1,"<%character.0.@s> soaked in <%character.1.@p> piss, taking in the musky scent of the <%character.1.species.!possessive> fluids.":1,"<%character.0.@s> pulled <%character.1.@o> close to <%character.0.pronoun.possessive> crotch. <%character.1.@s> quivered as the scent of the <%character.0.species> filled <%character.1.@p> nose. <%character.0.@s> let out a stream of golden liquid into <%character.1.@p> mouth, forcing <%character.1.pronoun.object> to drink it all up.":1,"<%character.0.@s> sniffed <%character.1.@p> crotch, as if daring <%character.1.@s> to piss all over <%character.0.pronoun.object>.":1,"There was piss all over the bed, staining the sheets gold.":1,"The scent of piss filled the room, hitting their noses with the musky smell.":1})),e.sentence_structures=r}function generateObjects(e){var a=e._kinks,r={},t={},o={};a.includes("Vanilla")&&(r=mergeProbabilityMaps(r,{pillow:1,blanket:1,"silk sheets":.3,bedsheets:.3,covers:.3,dildo:1,vibrator:1,cabbage:RARE_PROBABILITY}),t=mergeProbabilityMaps(t,{dildo:1,"anal beads":1,"anal plug":1,vibrator:1,cabbage:RARE_PROBABILITY}),o=mergeProbabilityMaps(o,{fleshlight:1,condom:1,dustbin:RARE_PROBABILITY,"cock ring":1})),a.includes("Bondage")&&(r=mergeProbabilityMaps(r,{harness:1,rope:1,gag:1,cuffs:1,chains:1,collar:1}),t=mergeProbabilityMaps(t,{"ball gag":1,"dildo gag":1,"ring gag":1}),o=mergeProbabilityMaps(o,{rope:1,restraints:1,"nipple clamps":1,cuffs:1,harness:1,"head harness":.3,chains:1,"spreader bars":1,collar:1})),a.includes("Latex/Rubber")&&(r=mergeProbabilityMaps(r,{"<%word.latex_insertable.$>":10}),t=mergeProbabilityMaps(t,{"gloved hand":1}),o=mergeProbabilityMaps(o,{"<%word.latex_insertable.$>":10,"rubber band":RARE_PROBABILITY})),a.includes("Leather")&&(r=mergeProbabilityMaps(r,{"leather harness":1,"leather hood":1}),o=mergeProbabilityMaps(o,{"leather harness":1,"leather hood":1})),a.includes("Chastity")&&(r=mergeProbabilityMaps(r,{"locking plug":1,"chastity cage":1,"chastity belt":1}),t=mergeProbabilityMaps(t,{"locking plug":1}),o=mergeProbabilityMaps(o,{"chastity cage":1,"chastity belt":1})),a.includes("Breathplay")&&(r=mergeProbabilityMaps(r,{gag:1,"airtight muzzle":1,"airtight hood":1,"breathplay hood":1}),t=mergeProbabilityMaps(t,{gag:1,"airtight muzzle":1,"airtight hood":1,"breathplay hood":1}),o=mergeProbabilityMaps(o,{"airtight muzzle":1})),a.includes("Impact Play")&&(t=mergeProbabilityMaps(t,{paddle:1,whip:1,flogger:1,cane:1,"riding crop":1,"Grandma Sue's ping pong paddle":RARE_PROBABILITY,"impact wrench":RARE_PROBABILITY})),a.includes("Tickling")&&(r=mergeProbabilityMaps(r,{feather:1,"feather duster":1}),t=mergeProbabilityMaps(t,{feather:1,"feather duster":1})),a.includes("Watersports")&&(r=mergeProbabilityMaps(r,{"funnel gag":1,"watersports hood":1}),t=mergeProbabilityMaps(t,{"funnel gag":1,"tube that was hooked up to the piss recepticle":1}),o=mergeProbabilityMaps(o,{"watersports hood":1})),e.object={touchable:r,giving:t,receiving:o}}function generateWords(e){e.word={},e.word.said={said:1,moaned:1,groaned:1,declared:1},e.word.touched={groped:1,stroked:1,caressed:1,touched:1,grabbed:1,squeezed:1,rubbed:1},e.word.inserted={inserted:1,shoved:1,put:1,placed:1,lodged:.05,implanted:.05,squeezed:RARE_PROBABILITY},e.word.latex={latex:1},e.word.latex_insertable={"<%word.latex.$> suit":void 0,"<%word.latex.$> hood":void 0,"<%word.latex.$> sleeves":void 0,"<%word.latex.$> gloves":void 0,"<%word.latex.$> trunks":void 0},e.word.penis={dick:1,penis:1,shaft:1,cock:1,tip:1,member:1,knot:1,rod:1,mast:.05,sceptre:.05,"meat sceptre":.05,staff:.05,flesh:.05,phallus:.05,pole:.05,"baby direct injection system":RARE_PROBABILITY,"gentleman's sausage":RARE_PROBABILITY,"meat torpedo":RARE_PROBABILITY,"one-eyed trouser snake":RARE_PROBABILITY},e.word.testes={testes:1,balls:1,nuts:1,globes:.05,jewels:.05,"M12x1.5 nuts":RARE_PROBABILITY},e.word.breasts={boobs:1,breasts:1,tits:1,bosom:1,"chest cushion":RARE_PROBABILITY},e.word.vagina={snatch:1,pussy:1,vagina:1,clit:1,vulva:1,spade:.05},e.word.butt={butt:1,ass:1,rump:1,bottom:1,buttocks:.3},e.word.anus={anus:1,pucker:1,ass:1,rump:1,bottom:1,posterior:1},e.word.mouth={mouth:1,maw:1,"open mouth":.3},e.word.arousal={arousal:1,enjoyment:1,pleasure:1,euphoria:1,indulgence:1,libido:1},e.word.smiled={smiled:1,grinned:1,smirked:1}}var allTitles=["<%character.$.name.!possessive> Secret","Secret of the <%character.$.species>","Fun Times with <%character.$.name>","Lair of the <%character.$.species>"],storyIntroductions=[["The ringing bells of Solace Academy signalled the start of a new semester. Tons of students streamed in, all dressed in the school's white uniform. Among them were <%all_names>, each excited to begin the semester with a fresh start.",'"<%character.0.name>, all the best for the day!" <%character.1.name> wished cheerily.','"Pssh, you know I will," <%character.0.name> replied, "See you after school?"','"Sure!" came the response.',"They left for their individual classes, following their hectic schedules from lesson to lesson. It was only after class that they met up again.",'"Wew," <%character.1.name> sighed wistfully, "What a tiring day!"','"I know, right?" <%character.0.name> replied.','"You know what I think? I think we should...reward ourselves for our hard work."','<%character.0.name> grinned, "Are you saying we should..."','"Yup."',"They soon found themselves in <%character.0.name.!possessive> room, naked and ready to have fun."],["It had been a pretty long shift at the Rel and Co Manufacturing Facility. As new starters,  <%all_names> had been put to work right after their site induction. Naturally, they stuck out like sore thumbs, having not been issued uniforms yet. Being new, they didn't really dare to talk to the others that came and went, but as misfits, they started chatting each other up. After all, it was their first jobs at a big company! There was excitement to be had and people to be met!",'<%character.1.name> looked over at the other slightly awkward new starters. "<%character.0.name>, are you new too?"','<%character.0.name> nodded. "Been a pretty hectic day, ay! Big change from school..."','<%character.1.name> chuckled as he rubbed his chin. "Yeah. We really earned our pay today."','"That indeed. How \'bout we head to the pub and grab a a drink or two before heading to my place for some fun?" <%character.0.name> replied with a sly grin.',"<%character.1.name> smirked and nodded. \"Don't see anything wrong with that. Let's get going!\"","After a drink or two at the local pub, things got a little frisky in the bathroom. Before long, they found themselves in <character.1.name.!possessive> room, having left their clothes in a crumpled heap on the floor and more than ready to have some fun."],["The bass was deep and the club was jiving to the sick beats. <%all_names> had popped down to the city for the club's special event. Half off for couples and de-facto parthers! Things were getting heated on the dance floor and in a good way!","<%character.0.name> was feeling up <%character.1.name.!possessive> body as they danced close on the floor, making almost no effort to hide their sexual overtures.","Hints were made and taken. Before too long, they left the club while the night was too young and retired to <%character.1.name.!possessive> house for the rest of the night. Several drinks and a movie or two later, they found themselves in the bedroom..."],["It was the most improbable encounter. <%all_names>, all childhood friends, happened to meet up at the busy junction by 8th Street.","<%character.0.name> wasn't the frisky type, but <%character.1.name> very much was. The trip to the bar only enhanced that one trait of <%character.1.@s>. This led to the usual touching and feeling among them before they headed back to <%character.$.@p> apartment where they found themselves shedding their clothes and headed for the bed."]],PRONOUNS={He:{subject:"he",object:"him",possessive:"his",independent_possessive:"his",reflexive:"himself"},She:{subject:"she",object:"her",possessive:"her",independent_possessive:"hers",reflexive:"herself"},They:{subject:"they",object:"them",possessive:"their",independent_possessive:"theirs",reflexive:"themself"},Co:{subject:"co",object:"co",possessive:"cos",independent_possessive:"cos",reflexive:"coself"},En:{subject:"en",object:"en",possessive:"ens",independent_possessive:"ens",reflexive:"enself"},Ey:{subject:"ey",object:"em",possessive:"eir",independent_possessive:"eirs",reflexive:"emself"},Xie:{subject:"xie",object:"hir",possessive:"hir",independent_possessive:"hirs",reflexive:"hirself"},Yo:{subject:"yo",object:"yo",possessive:"yos",independent_possessive:"yos",reflexive:"yoself"},Ze:{subject:"ze",object:"zir",possessive:"zir",independent_possessive:"zirs",reflexive:"zirself"},Ve:{subject:"ve",object:"vis",possessive:"ver",independent_possessive:"ver",reflexive:"verself"},It:{subject:"it",object:"it",possessive:"its",independent_possessive:"its",reflexive:"it"}};
+    </script>
+</head>
+<body>
+    <div id="template-character-container" style="display: none;">
+        <div class="character-container">
+                <div><label>Name</label><input class="character-name"/></div>
+                <div><label>Gender</label><select class="character-gender"></select></div>
+                <div><label>Pronoun</label><select class="character-pronoun"></select></div>
+                <div><label>Species</label><input class="character-species"/></div>
+                <div style="text-align: center;"><span class="remove-character-btn button">Remove</span></div>
+        </div>
+    </div>
+    <div class="body-container">
+        <div id="top-margin"></div>
+        <div id="title-container" class="container"></div>
+
+        <div id="loader-container" class="container" style="display: none;">
+                <canvas id="loader-loop" width="100" height="100"></canvas>
+        </div>
+
+        <div id="settings-container" class="container"  style="display:none;">
+            <div id="settings-kinks">
+                <div style="text-align: center;"><label class="tab-heading">Kinks</label></div>
+            </div>
+            <div id="settings-characters" style="margin-top: 10px;">
+                <label class="tab-heading">Characters</label>
+            </div>
+            <div id="settings-add-character" style="margin-top: 15px; text-align: center;">
+                <span class="add-character-btn button">Add Character</span>
+            </div>
+            <div id="create-story" style="margin-top: 15px; text-align: center;">
+                <span class="generate-story-btn button">Write!</span>
+            </div>
+        </div>
+
+        <div id="story-title-container" class="container" style="display: none;">
+            <h1 id="story-title"></h1>
+        </div>
+
+        <div id="story-container" class="container" style="display: none;"></div>
+    </div>
+
+</body>
+</html>

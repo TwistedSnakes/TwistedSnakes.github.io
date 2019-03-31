@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Reader Cache Deleter</title>
+    <meta charset="utf-8">
+    <script>
+        delete localStorage['reader-font'];
+        delete localStorage['reader-css'];
+        delete localStorage['reader-html'];
+        window.addEventListener('load', () => document.getElementsByTagName('body')[0].innerHTML = 'Cache deleted');
+    </script>
+</head>
+<body>
+</body>
+</html>

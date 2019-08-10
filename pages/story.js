@@ -101,7 +101,10 @@ function loadStoryListing() {
     new Promise(resolve => $.get('stories/resources/story-listing.json', resolve))
     .then(result => {
         globalStoryListing = result.filter(storyMetadata => storyMetadata.is_listed);
-        renderStoryListing(result);
+        globalStoryListing.forEach(storyMetadata => storyMetadata.upload_date_obj = new Date(storyMetadata.upload_date));
+        globalStoryListing.sort(compareStoriesById);
+        globalStoryListing.reverse();
+        renderStoryListing(globalStoryListing);
     });
 }
 

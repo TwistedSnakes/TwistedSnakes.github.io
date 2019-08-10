@@ -48,10 +48,6 @@
     max-width: 650px;
 }
 
-#age-restricted-panel .container-bottom-padding {
-    height: 200px;
-}
-
 /* Checkbox label */
 #age-restricted-panel .checkbox-container {
     display: block;

@@ -104,7 +104,6 @@
 
 #content-body .search-container .tt-menu {
     width: 100%;
-    padding: 4px 8px;
     margin-top: 4px;
 
     border-radius: 5px; 
@@ -112,10 +111,13 @@
     background-color: white;
 }
 
+#content-body .search-container .tt-dataset {
+    padding-top: 2px;
+}
+
 #content-body .search-container .tt-dataset:not(:first-child) {
     margin-top: 6px;
     border-top: 1px solid #dddddd;
-    padding-top: 4px;
 }
 
 #content-body .search-container .tt-dataset:not(:last-child) {
@@ -125,7 +127,9 @@
 #content-body .search-container .tt-dataset-header {
     font-family: 'Raleway', sans-serif;
     font-size: 18px;
-    color: #666666
+    color: #666666;
+
+    padding: 2px 8px;
 }
 
 #content-body .search-container .tt-selectable:hover,
@@ -133,19 +137,23 @@
     background-color: var(--primary-color-light);
 }
 
-#content-body .tt-dataset-story .tt-selectable {
-    padding: 6px 0;
+#content-body .search-container .tt-suggestion {
+    padding: 0 8px;
 }
 
-#content-body .tt-dataset-story .tt-selectable:not(:last-child) {
-    border-bottom: 1px solid #bbbbbb;
+#content-body .search-container .tt-dataset-story .tt-suggestion {
+    padding: 6px 8px;
 }
 
-#content-body .tt-selectable .story-title {
+#content-body .search-container .tt-dataset-story .tt-suggestion:nth-child(even):not(:hover):not(.tt-cursor) {
+    background-color: #f0f0f0;
+}
+
+#content-body .search-container .tt-suggestion .story-title {
     font-weight: 700;
 }
 
-#content-body .tt-selectable .story-tag-list {
+#content-body .search-container .tt-suggestion .story-tag-list {
     font-size: 16px;
     line-height: 16px;
     font-style: italic; 
@@ -180,4 +188,9 @@
     color: var(--text-color-light);
     background-color: var(--primary-color-dark);
     border-radius: 5px;
+}
+
+#content-body #sort-select {
+    margin-left: 3px;
+    width: 240px;
 }

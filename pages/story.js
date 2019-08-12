@@ -26,86 +26,141 @@ $(window).resize(() => {
     checkBannerImg();
 });
 
-var globalStoryListing = [];
-var globalStoryMap = {};
+let allStorySorters = [
+    { text: 'Sequence (Ascending)', comparer: compareStoriesById },
+    { text: 'Sequence (Descending)', comparer: (a, b) => compareStoriesById(b, a) },
+    { text: 'Title (Ascending)', comparer: (a, b) => a.title.localeCompare(b.title) },
+    { text: 'Title (Descending)', comparer: (a, b) =>  b.title.localeCompare(a.title) },
+    { text: 'Word count (Ascending)', comparer: (a, b) => a.word_count - b.word_count },
+    { text: 'Word count (Descending)', comparer: (a, b) => b.word_count - a.word_count },
+    { text: 'Upload date (Ascending)', comparer: (a, b) => a.upload_date_obj.getTime() - b.upload_date_obj.getTime() },
+    { text: 'Upload date (Descending)', comparer: (a, b) => b.upload_date_obj.getTime() - a.upload_date_obj.getTime() },
+];
+
+class StoryFilterManager {
+    constructor(allStoryMetadata) {
+        if (allStoryMetadata === undefined) {
+            allStoryMetadata = [];
+        }
+        this.allStoryMetadata = JSON.parse(JSON.stringify(allStoryMetadata)); // deep copy
+        this.allStoryMap = {};
+        this.allStoryMetadata.forEach((storyMetadata) => {
+            storyMetadata.upload_date_obj = new Date(storyMetadata.upload_date);
+            storyMetadata.tags_set = new Set(storyMetadata.tags);
+
+            this.allStoryMap[storyMetadata.id] = storyMetadata;
+        });
+
+        this.isFiltersUpdated = false;
+        this.filteredStoryMetadata = [];
+        this.filteredStoryMap = {}
+        this.filteredTagCount = {};
+
+        this.storyComparer = () => 0;
+
+        this.filterTags = new Set();
+    }
+
+    getStoryMetadata(storyId) {
+        if (this.allStoryMap[storyId] === undefined) {
+            return undefined;
+        }
+        let clonedMetadata = Object.assign({}, this.allStoryMap[storyId]);
+        // Remove custom data
+        delete clonedMetadata.upload_date_obj;
+        delete clonedMetadata.tags_set;
+        return JSON.parse(JSON.stringify(clonedMetadata));
+    }
+
+    getStories() {
+        if (!this.isFilterValid()) {
+            this.updateFilter();
+        }
+        return this.filteredStoryMetadata.slice(0);
+    }
+
+    isStoryListed(storyId) {
+        return this.filteredStoryMap[storyId] !== undefined;
+    }
+
+    countTagInStories(tag) {
+        if (!this.isFilterValid() || !this.filteredTagCount.hasOwnProperty(tag)) {
+            let count = 0;
+            this.getStories().forEach(storyMetadata => { if (storyMetadata.tags_set.has(tag)) { count++; } });
+            this.filteredTagCount[tag] = count;
+        }
+        return this.filteredTagCount[tag];
+    }
+
+    invalidateFilter() {
+        this.isFiltersUpdated = false;
+    }
+
+    isFilterValid() {
+        return this.isFiltersUpdated;
+    }
+
+    updateFilter() {
+        this.filteredStoryMetadata = this.allStoryMetadata.filter((storyMetadata) => [...this.filterTags].every(tag => storyMetadata.tags_set.has(tag)));
+        this.filteredStoryMetadata.sort()
+        
+        this.filteredStoryMap = {};
+        this.filteredStoryMetadata.forEach(storyMetadata => this.filteredStoryMap[storyMetadata.id] = storyMetadata);
+        this.filteredTagCount = {};
+    
+        this.isFiltersUpdated = true;
+    }
+
+    addFilterTag(tag) {
+        if (this.filterTags.has(tag)) {
+            return false;
+        }
+        this.invalidateFilter();
+        this.filterTags.add(tag);
+        return true;
+    }
+
+    removefilterTag(tag) {
+        if (!this.filterTags.has(tag)) {
+            return false;
+        }
+        this.invalidateFilter();
+        this.filterTags.delete(tag);
+        return true;
+    }
+    
+    isFilteredTag(tag) {
+        return this.filterTags.has(tag);
+    }
+
+    setStoryComparer(comparer) {
+        this.storyComparer = comparer;
+        this.allStoryMetadata.sort(comparer);
+        this.filteredStoryMetadata.sort(comparer);
+    }
+}
+
+var storyStorage = new StoryFilterManager(); // placeholder
 
 function loadStoryListing() {
     new Promise(resolve => $.get('stories/resources/story-listing.json', resolve))
-        .then(result => {
-            globalStoryListing = result.filter(storyMetadata => storyMetadata.is_listed);
-            resetTagFilter();
-            
-            globalStoryMap = {};
-            globalStoryListing.forEach(storyMetadata => {
-                storyMetadata.upload_date_obj = new Date(storyMetadata.upload_date);
-                storyMetadata.tags_set = new Set(storyMetadata.tags);
-
-                globalStoryMap[storyMetadata.id] = storyMetadata;
-            });
-
-            globalStoryListing.sort(compareStoriesById);
-            globalStoryListing.reverse();
-            
-            renderStoryListing(globalStoryListing);
+        .then(allStoryMetadata => {
+            storyStorage = new StoryFilterManager(allStoryMetadata);
+            storyStorage.setStoryComparer(allStorySorters[$('#sort-select select').get(0).selectedIndex].comparer);
+            renderStoryListing();
         });
 }
 
-var isStoryListingFiltered = false;
-var filteredStoryListing = [];
-var filteredStoryMap = {}
-var tagsInFilteredStoryListing = {};
-
-function resetTagFilter() {
-    isStoryListingFiltered = false;
-    filteredStoryListing = [];
-    filteredStoryMap = {};
-    tagsInFilteredStoryListing = {};
-}
-
-function modifyTagFilter() {
-    isStoryListingFiltered = false;
-}
-
-function initalizeTagFilter() {
-    filteredStoryListing = globalStoryListing.filter((storyMetadata) => [...activeSearchTags].every(tag => storyMetadata.tags_set.has(tag)));
-    filteredStoryMap = {};
-    filteredStoryListing.forEach(storyMetadata => filteredStoryMap[storyMetadata.id] = storyMetadata);
-    tagsInFilteredStoryListing = {};
-
-    isStoryListingFiltered = true;
-}
-
-function getFilteredStoryListing() {
-    if (!isStoryListingFiltered) {
-        initalizeTagFilter();
-    }
-    return filteredStoryListing;
-}
-
-function getFilteredStoryMap() {
-    if (!isStoryListingFiltered) {
-        initalizeTagFilter();
-    }
-    return filteredStoryMap;
-}
-
-function countTagsInFilteredStoryListing(tag) {
-    if (!isStoryListingFiltered || !tagsInFilteredStoryListing.hasOwnProperty(tag)) {
-        var storyList = getFilteredStoryListing();
-        let count = 0;
-        storyList.forEach(storyMetadata => { if (storyMetadata.tags_set.has(tag)) { count++; } });
-        tagsInFilteredStoryListing[tag] = count;
-    }
-    return tagsInFilteredStoryListing[tag];
-}
-
-function renderStoryListing(storyListing) {
+function renderStoryListing() {
     $('#story-listing-panel').empty();
-    if (storyListing.length == 0) {
+    let storyList = storyStorage.getStories();
+    if (storyList.length === 0) {
+        $('#story-sort-container').hide();
         $('#story-listing-panel').append($('.no-stories-listed-template').html());
         return;
     }
-    storyListing.forEach(storyMetadata => {
+    $('#story-sort-container').show();
+    storyList.forEach(storyMetadata => {
         var storyPanelId = `panel-${storyMetadata.id}`
         var storyPanel = $($('.story-panel-template').html());
         storyPanel.attr('id', storyPanelId);
@@ -121,8 +176,6 @@ function renderStoryListing(storyListing) {
     });
 }
 
-var activeSearchTags = new Set();
-
 function checkTagDisplay() {
     if ($('#search-list-tag-container').children().length > 0) {
         $('#search-tag-container').show();
@@ -132,11 +185,10 @@ function checkTagDisplay() {
 }
 
 function addSearchTag(tagStr) {
-    if (activeSearchTags.has(tagStr)) {
+    if (storyStorage.isFilteredTag(tagStr)) {
         return;
     }
-    activeSearchTags.add(tagStr);
-    modifyTagFilter();
+    storyStorage.addFilterTag(tagStr);
 
     var tagElem = $($('.tag-template').html());
     tagElem.text(tagStr);
@@ -144,18 +196,20 @@ function addSearchTag(tagStr) {
     $('#search-list-tag-container').append(tagElem);
 
     checkTagDisplay();
-    renderStoryListing(getFilteredStoryListing());
+    renderStoryListing();
 }
 
 function removeSearchTag(tagElem) {
+    if (!storyStorage.isFilteredTag(tagElem.innerText)) {
+        return;
+    }
     var tag = tagElem.innerText;
-    activeSearchTags.delete(tag);
-    modifyTagFilter();
+    storyStorage.removefilterTag(tag);
 
     $(tagElem).remove();
 
     checkTagDisplay();
-    renderStoryListing(getFilteredStoryListing());
+    renderStoryListing();
 }
 
 $(document).ready(function () {
@@ -164,6 +218,18 @@ $(document).ready(function () {
     checkTagDisplay();
     $('.banner-img').removeClass('hidden');
     loadStoryListing();
+
+    $('#sort-select select').empty();
+    allStorySorters.forEach((option) => {
+        $('#sort-select select').append($(`<option>${option.text}</option>`))
+    })
+    $('#sort-select select').get(0).selectedIndex = 1;
+    $('.select-container').each((_, selectContainer) => initializeDropdown(selectContainer));
+    $('.select-container select').change((event) => {
+        let selectedIndex = event.currentTarget.selectedIndex;
+        storyStorage.setStoryComparer(allStorySorters[selectedIndex].comparer);
+        renderStoryListing();
+    });
 
     splitterRegex = splitter_regex = [
         '\\s',   // Space
@@ -209,21 +275,15 @@ $(document).ready(function () {
             identify: (tagObj) => tagObj.tag,
             sufficient: 100,
             prefetch: {
-                url: 'stories/resources/tag_lookup.json',
-                cache: false
+                url: 'stories/resources/tag_lookup.json'
             },
-            sorter: (a, b) => countTagsInFilteredStoryListing(b.tag) - countTagsInFilteredStoryListing(a.tag)
-        }), tagObj => !activeSearchTags.has(tagObj.tag) && countTagsInFilteredStoryListing(tagObj.tag) > 0),
+            sorter: (a, b) => storyStorage.countTagInStories(b.tag) - storyStorage.countTagInStories(a.tag)
+        }), tagObj => !storyStorage.isFilteredTag(tagObj.tag) && storyStorage.countTagInStories(tagObj.tag) > 0),
         limit: 10,
         templates: {
             header: '<div class="tt-dataset-header">Tag</div>',
             notFound: '<div class="tt-dataset-header">No tags found</div>',
-            suggestion: tagObj => {
-                return `<div>${tagObj.tag} (${countTagsInFilteredStoryListing(tagObj.tag)})</div>`;
-                return activeSearchTags.has(tagObj.tag)
-                    ? `<div class="existing-tag">${tagObj.tag}</div>`
-                    : `<div>${tagObj.tag} (${countTagsInFilteredStoryListing(tagObj.tag)})</div>`;
-            }
+            suggestion: tagObj => `<div>${tagObj.tag} (${storyStorage.countTagInStories(tagObj.tag)})</div>`
         },
         async: false
     }, {
@@ -235,10 +295,9 @@ $(document).ready(function () {
             identify: (storyObj) => storyObj.id,
             sufficient: 100,
             prefetch: {
-                url: 'stories/resources/story_lookup.json',
-                cache: false
+                url: 'stories/resources/story_lookup.json'
             }
-        }), storyObj => getFilteredStoryMap(storyObj.id) !== undefined),
+        }), storyObj => storyStorage.isStoryListed(storyObj.id)),
         limit: 5,
         templates: {
             header: '<div class="tt-dataset-header">Story</div>',
@@ -248,7 +307,7 @@ $(document).ready(function () {
                     <div class="tt-suggestion tt-selectable">
                         <span class="story-title">${storyObj.title}</span>
                         <br>
-                        <span class="story-tag-list">${globalStoryMap[storyObj.id].tags.join(', ')}</span>
+                        <span class="story-tag-list">${storyStorage.getStoryMetadata(storyObj.id).tags.join(', ')}</span>
                     </div>
                 `;
             }

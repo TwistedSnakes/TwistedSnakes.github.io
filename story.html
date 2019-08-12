@@ -46,12 +46,12 @@
     <!-- Twitter Typeahead -->
     <script src="lib/typeahead-0.11.1.bundle.js"></script>
 
+    <!-- Story Utilities -->
+    <script src="stories/resources/reader-utils.js"></script>
+
     <!-- Page-loading Script -->
     <script src="pages/utils.js"></script>
     <script src="pages/story.js"></script>
-    
-    <!-- Story Utilities -->
-    <script src="stories/resources/reader-utils.js"></script>
 
 </head>
 <body>
@@ -138,6 +138,17 @@
         </div>
         
         <div class="panel block-white story-panel" data-header-name="">
+            <div id="story-sort-container" class="container">
+                <div class="w-100 h-100 d-flex justify-content-center">
+                    <div class="row d-flex justify-content-end w-100 mb-3">
+                        <div>Order by
+                            <div id="sort-select" class="select-container">
+                                <select></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="container d-flex justify-content-center">
                 <div id="story-listing-panel" class="row story-container w-100">
                 </div>

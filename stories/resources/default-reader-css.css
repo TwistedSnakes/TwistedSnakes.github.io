@@ -141,6 +141,9 @@ html {
     /* Limits how wide the descriptions can be */
     width: 100%;
     max-width: 650px;
+
+    /* Spacing between the container border and the sides of the screen */
+    padding: 0 12px;
 }
 
 .prefix-text > div,

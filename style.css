@@ -149,6 +149,14 @@ nav .navbar-toggler-icon {
     font-size: 14px;
 }
 
+/* UI Elements */
+
+input[type="text"] {
+    padding: 4px 8px;
+    border-radius: 5px;
+    border: 1px solid #bbbbbb;
+}
+
 /* Content */
 
 .hidden {

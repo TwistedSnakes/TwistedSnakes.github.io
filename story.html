@@ -43,6 +43,8 @@
     <script src="lib/jquery-3.4.1.min.js"></script>
     <!-- Boostrap JS -->
     <script src="lib/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <!-- Twitter Typeahead -->
+    <script src="lib/typeahead-0.11.1.bundle.js"></script>
 
     <!-- Page-loading Script -->
     <script src="pages/utils.js"></script>
@@ -118,6 +120,22 @@
                 </div>
             </div>
         </div>
+
+        <div class="panel block-light story-panel" data-header-name="">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h2 class="pb-0">Search</h2>
+                        <input id="search-input" type="text" placeholder="Search tags or stories">
+                        <div id="search-tag-container">
+                            <h3>Tags</h3>
+                            <div id="search-list-tag-container">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <div class="panel block-white story-panel" data-header-name="">
             <div class="container d-flex justify-content-center">
@@ -140,6 +158,10 @@
                 <div class="no-story-info-box col-sm-12 d-flex justify-content-center">
                     <p>No story matches your search terms. Please try again.</p>
                 </div>
+            </div>
+
+            <div class="tag-template">
+                <span class="tag"></span>
             </div>
         </div>
     </div>

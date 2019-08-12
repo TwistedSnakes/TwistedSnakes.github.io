@@ -92,3 +92,92 @@
 #content-body .no-story-info-box p {
     margin: 0;
 }
+
+#content-body .search-container {
+    width: 100%;
+}
+
+#content-body .search-container .tt-input,
+#content-body .search-container .tt-hint {
+    width: 100%;
+}
+
+#content-body .search-container .tt-menu {
+    width: 100%;
+    padding: 4px 8px;
+    margin-top: 4px;
+
+    border-radius: 5px; 
+    border: 1px solid #bbbbbb;
+    background-color: white;
+}
+
+#content-body .search-container .tt-dataset:not(:first-child) {
+    margin-top: 6px;
+    border-top: 1px solid #dddddd;
+    padding-top: 4px;
+}
+
+#content-body .search-container .tt-dataset:not(:last-child) {
+    margin-bottom: 6px;
+}
+
+#content-body .search-container .tt-dataset-header {
+    font-family: 'Raleway', sans-serif;
+    font-size: 18px;
+    color: #666666
+}
+
+#content-body .search-container .tt-selectable:hover,
+#content-body .search-container .tt-selectable.tt-cursor {
+    background-color: var(--primary-color-light);
+}
+
+#content-body .tt-dataset-story .tt-selectable {
+    padding: 6px 0;
+}
+
+#content-body .tt-dataset-story .tt-selectable:not(:last-child) {
+    border-bottom: 1px solid #bbbbbb;
+}
+
+#content-body .tt-selectable .story-title {
+    font-weight: 700;
+}
+
+#content-body .tt-selectable .story-tag-list {
+    font-size: 16px;
+    line-height: 16px;
+    font-style: italic; 
+}
+
+#content-body #search-tag-container h3 {
+    content: "Tags";
+    font-family: 'Raleway', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    display: block;
+
+    margin-bottom: 10px;
+    padding: 0;
+}
+
+#content-body #search-tag-container {
+    margin-top: 22px;
+}
+
+#content-body #search-list-tag-container {
+    margin: -2px;
+}
+
+#content-body #search-list-tag-container .tag {
+    display: inline-block;
+    position: relative;
+    margin: 2px;
+    padding: 4px 12px 4px 12px;
+
+    cursor: pointer;
+    color: var(--text-color-light);
+    background-color: var(--primary-color-dark);
+    border-radius: 5px;
+}

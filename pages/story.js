@@ -26,86 +26,77 @@ $(window).resize(() => {
     checkBannerImg();
 });
 
-function beautifyMinutes(minutes) {
-    minutes = Math.round(Math.max(1, minutes));
-    if (minutes < 30) {
-        return {
-            'amount': '' + minutes,
-            'units': 'minute'
-        };
-    } else if (minutes < 60) {
-        minutes = Math.round(minutes / 5) * 5;
-        return {
-            'amount': '' + minutes,
-            'units': 'minute'
-        };
-    } else if (minutes < 60 * 24) {
-        var hours = minutes / 60;
-        hours = Math.round(hours * 10) / 10;
-        return {
-            'amount': '' + hours,
-            'units': 'hour'
-        };
-    } else if (minutes < 60 * 24 * 365) {
-        var days = minutes / 60 / 24;
-        days = Math.round(days * 10) / 10;
-        return {
-            'amount': '' + days,
-            'units': 'day'
-        };
-    } else {
-        var years = minutes / 60 / 24 / 365;
-        years = Math.round(years * 10) / 10;
-        return {
-            'amount': '' + years,
-            'units': 'year'
-        };
-    }
-}
-
-function wordCountToTime(wordCount) {
-    var speedLBound = 250;
-    var speedUBound = 400;
-
-    var timeLBound = wordCount / speedUBound;
-    var timeUBound = wordCount / speedLBound;
-
-    var beautifiedLBound = beautifyMinutes(timeLBound);
-    var beautifiedUBound = beautifyMinutes(timeUBound);
-
-    if (beautifiedLBound.units == beautifiedUBound.units) {
-        if (beautifiedLBound.amount == beautifiedUBound.amount) {
-            if (parseFloat(beautifiedLBound.amount) <= 1) {
-                return `${beautifiedLBound.amount} ${beautifiedLBound.units}`
-            } else {
-                return `${beautifiedLBound.amount} ${beautifiedLBound.units}s`
-            }
-        }
-        if (parseFloat(beautifiedUBound.amount) <= 1) {
-            return `${beautifiedLBound.amount} - ${beautifiedUBound.amount} ${beautifiedLBound.units}`
-        } else {
-            return `${beautifiedLBound.amount} - ${beautifiedUBound.amount} ${beautifiedLBound.units}s`
-        }
-    } else {
-        var lBoundStr = `${beautifiedLBound.amount} ${beautifiedLBound.units}` +
-            (parseFloat(beautifiedLBound.amount) <= 1 ? '' : 's');
-        var uBoundStr = `${beautifiedUBound.amount} ${beautifiedUBound.units}` +
-            (parseFloat(beautifiedUBound.amount) <= 1 ? '' : 's');
-        return `${lBoundStr} - ${uBoundStr}`
-    }
-}
-
-var globalStoryListing;
+var globalStoryListing = [];
+var globalStoryMap = {};
 
 function loadStoryListing() {
     new Promise(resolve => $.get('stories/resources/story-listing.json', resolve))
-    .then(result => {
-        globalStoryListing = result.filter(storyMetadata => storyMetadata.is_listed);
-        globalStoryListing.forEach(storyMetadata => storyMetadata.upload_date_obj = new Date(storyMetadata.upload_date));
-        globalStoryListing.sort(compareStoriesById);
-        globalStoryListing.reverse();
-        renderStoryListing(globalStoryListing);
-    });
+        .then(result => {
+            globalStoryListing = result.filter(storyMetadata => storyMetadata.is_listed);
+            resetTagFilter();
+            
+            globalStoryMap = {};
+            globalStoryListing.forEach(storyMetadata => {
+                storyMetadata.upload_date_obj = new Date(storyMetadata.upload_date);
+                storyMetadata.tags_set = new Set(storyMetadata.tags);
+
+                globalStoryMap[storyMetadata.id] = storyMetadata;
+            });
+
+            globalStoryListing.sort(compareStoriesById);
+            globalStoryListing.reverse();
+            
+            renderStoryListing(globalStoryListing);
+        });
+}
+
+var isStoryListingFiltered = false;
+var filteredStoryListing = [];
+var filteredStoryMap = {}
+var tagsInFilteredStoryListing = {};
+
+function resetTagFilter() {
+    isStoryListingFiltered = false;
+    filteredStoryListing = [];
+    filteredStoryMap = {};
+    tagsInFilteredStoryListing = {};
+}
+
+function modifyTagFilter() {
+    isStoryListingFiltered = false;
+}
+
+function initalizeTagFilter() {
+    filteredStoryListing = globalStoryListing.filter((storyMetadata) => [...activeSearchTags].every(tag => storyMetadata.tags_set.has(tag)));
+    filteredStoryMap = {};
+    filteredStoryListing.forEach(storyMetadata => filteredStoryMap[storyMetadata.id] = storyMetadata);
+    tagsInFilteredStoryListing = {};
+
+    isStoryListingFiltered = true;
+}
+
+function getFilteredStoryListing() {
+    if (!isStoryListingFiltered) {
+        initalizeTagFilter();
+    }
+    return filteredStoryListing;
+}
+
+function getFilteredStoryMap() {
+    if (!isStoryListingFiltered) {
+        initalizeTagFilter();
+    }
+    return filteredStoryMap;
+}
+
+function countTagsInFilteredStoryListing(tag) {
+    if (!isStoryListingFiltered || !tagsInFilteredStoryListing.hasOwnProperty(tag)) {
+        var storyList = getFilteredStoryListing();
+        let count = 0;
+        storyList.forEach(storyMetadata => { if (storyMetadata.tags_set.has(tag)) { count++; } });
+        tagsInFilteredStoryListing[tag] = count;
+    }
+    return tagsInFilteredStoryListing[tag];
 }
 
 function renderStoryListing(storyListing) {
@@ -130,10 +121,148 @@ function renderStoryListing(storyListing) {
     });
 }
 
-$(document).ready(function() {
+var activeSearchTags = new Set();
+
+function checkTagDisplay() {
+    if ($('#search-list-tag-container').children().length > 0) {
+        $('#search-tag-container').show();
+    } else {
+        $('#search-tag-container').hide();
+    }
+}
+
+function addSearchTag(tagStr) {
+    if (activeSearchTags.has(tagStr)) {
+        return;
+    }
+    activeSearchTags.add(tagStr);
+    modifyTagFilter();
+
+    var tagElem = $($('.tag-template').html());
+    tagElem.text(tagStr);
+    tagElem.click((event) => removeSearchTag(event.currentTarget));
+    $('#search-list-tag-container').append(tagElem);
+
+    checkTagDisplay();
+    renderStoryListing(getFilteredStoryListing());
+}
+
+function removeSearchTag(tagElem) {
+    var tag = tagElem.innerText;
+    activeSearchTags.delete(tag);
+    modifyTagFilter();
+
+    $(tagElem).remove();
+
+    checkTagDisplay();
+    renderStoryListing(getFilteredStoryListing());
+}
+
+$(document).ready(function () {
     checkNavbarOpacity();
     checkBannerImg();
-
+    checkTagDisplay();
     $('.banner-img').removeClass('hidden');
     loadStoryListing();
+
+    splitterRegex = splitter_regex = [
+        '\\s',   // Space
+        '\\-',   // Dash
+        "\\'",   // Single quote
+        '\\"',   // Double quote
+        '\\,',   // Comma
+        '\\.',   // Period
+        '\\/',   // Slash
+        '\\\\',  // Backslash
+        '\\(',   // Open bracket
+        '\\)',   // Close bracket
+        '\\[',   // Open square bracket
+        '\\]',   // Close square bracket
+    ];
+    tokenSplitter = new RegExp(`[${splitterRegex.join('')}]+`)
+    function queryTokenizer(query) {
+        var tokenSet = new Set(query.toLowerCase().split(tokenSplitter));
+        query.toLowerCase().split(' ').forEach(token => tokenSet.add(token));
+        tokenSet.add(query.toLowerCase());
+        return [...tokenSet];
+    }
+
+    function makeFilteredSource(bloodhound, filterFunction) {
+        return (query, syncResults, asyncResults) => {
+            bloodhound.search(
+                query,
+                (results) => syncResults(results.filter(filterFunction)),
+                (results) => asyncResults(results.filter(filterFunction))
+            );
+        };
+    }
+
+    $('#search-input').typeahead({
+        hint: true,
+        minLength: 1
+    }, {
+        name: 'tag',
+        display: 'tag',
+        source: makeFilteredSource(new Bloodhound({
+            datumTokenizer: (tagObj) => tagObj.relevant_keywords,
+            queryTokenizer : queryTokenizer,
+            identify: (tagObj) => tagObj.tag,
+            sufficient: 100,
+            prefetch: {
+                url: 'stories/resources/tag_lookup.json',
+                cache: false
+            },
+            sorter: (a, b) => countTagsInFilteredStoryListing(b.tag) - countTagsInFilteredStoryListing(a.tag)
+        }), tagObj => !activeSearchTags.has(tagObj.tag) && countTagsInFilteredStoryListing(tagObj.tag) > 0),
+        limit: 10,
+        templates: {
+            header: '<div class="tt-dataset-header">Tag</div>',
+            notFound: '<div class="tt-dataset-header">No tags found</div>',
+            suggestion: tagObj => {
+                return `<div>${tagObj.tag} (${countTagsInFilteredStoryListing(tagObj.tag)})</div>`;
+                return activeSearchTags.has(tagObj.tag)
+                    ? `<div class="existing-tag">${tagObj.tag}</div>`
+                    : `<div>${tagObj.tag} (${countTagsInFilteredStoryListing(tagObj.tag)})</div>`;
+            }
+        },
+        async: false
+    }, {
+        name: 'story',
+        display: 'title',
+        source: makeFilteredSource(new Bloodhound({
+            datumTokenizer: (storyObj) => storyObj.relevant_keywords,
+            queryTokenizer : (query) => queryTokenizer(query.toLowerCase()),
+            identify: (storyObj) => storyObj.id,
+            sufficient: 100,
+            prefetch: {
+                url: 'stories/resources/story_lookup.json',
+                cache: false
+            }
+        }), storyObj => getFilteredStoryMap(storyObj.id) !== undefined),
+        limit: 5,
+        templates: {
+            header: '<div class="tt-dataset-header">Story</div>',
+            notFound: '<div class="tt-dataset-header">No stories found</div>',
+            suggestion: storyObj => {
+                return `
+                    <div class="tt-suggestion tt-selectable">
+                        <span class="story-title">${storyObj.title}</span>
+                        <br>
+                        <span class="story-tag-list">${globalStoryMap[storyObj.id].tags.join(', ')}</span>
+                    </div>
+                `;
+            }
+        },
+        async: false
+    });
+    $('#search-input').parent().addClass('search-container');
+
+    $('#search-input').bind('typeahead:select', (event, selectedElement) => {
+        if (selectedElement['entry_type'] == 'tag') {
+            addSearchTag(selectedElement['tag'])
+            $('#search-input').typeahead('val', '');
+        } else if (selectedElement['entry_type'] == 'story') {
+            window.open(`/stories/${selectedElement['id']}/read.html`);
+        }
+    });
 });

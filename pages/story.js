@@ -212,25 +212,7 @@ function removeSearchTag(tagElem) {
     renderStoryListing();
 }
 
-$(document).ready(function () {
-    checkNavbarOpacity();
-    checkBannerImg();
-    checkTagDisplay();
-    $('.banner-img').removeClass('hidden');
-    loadStoryListing();
-
-    $('#sort-select select').empty();
-    allStorySorters.forEach((option) => {
-        $('#sort-select select').append($(`<option>${option.text}</option>`))
-    })
-    $('#sort-select select').get(0).selectedIndex = 1;
-    $('.select-container').each((_, selectContainer) => initializeDropdown(selectContainer));
-    $('.select-container select').change((event) => {
-        let selectedIndex = event.currentTarget.selectedIndex;
-        storyStorage.setStoryComparer(allStorySorters[selectedIndex].comparer);
-        renderStoryListing();
-    });
-
+function initializeTagSearch(thumbprint) {
     let splitterRegex = splitter_regex = [
         '\\s',   // Space
         '\\-',   // Dash
@@ -275,7 +257,8 @@ $(document).ready(function () {
             identify: (tagObj) => tagObj.tag,
             sufficient: 100,
             prefetch: {
-                url: 'stories/resources/tag_lookup.json'
+                url: 'stories/resources/tag-lookup.json',
+                thumbprint
             },
             sorter: (a, b) => storyStorage.countTagInStories(b.tag) - storyStorage.countTagInStories(a.tag)
         }), tagObj => !storyStorage.isFilteredTag(tagObj.tag) && storyStorage.countTagInStories(tagObj.tag) > 0),
@@ -295,7 +278,8 @@ $(document).ready(function () {
             identify: (storyObj) => storyObj.id,
             sufficient: 100,
             prefetch: {
-                url: 'stories/resources/story_lookup.json'
+                url: 'stories/resources/story-lookup.json',
+                thumbprint
             }
         }), storyObj => storyStorage.isStoryListed(storyObj.id)),
         limit: 5,
@@ -324,4 +308,28 @@ $(document).ready(function () {
             window.open(`/stories/${selectedElement['id']}/read.html`);
         }
     });
+}
+
+$(document).ready(function () {
+    checkNavbarOpacity();
+    checkBannerImg();
+    checkTagDisplay();
+    $('.banner-img').removeClass('hidden');
+    loadStoryListing();
+
+    $('#sort-select select').empty();
+    allStorySorters.forEach((option) => {
+        $('#sort-select select').append($(`<option>${option.text}</option>`))
+    })
+    $('#sort-select select').get(0).selectedIndex = 1;
+    $('.select-container').each((_, selectContainer) => initializeDropdown(selectContainer));
+    $('.select-container select').change((event) => {
+        let selectedIndex = event.currentTarget.selectedIndex;
+        storyStorage.setStoryComparer(allStorySorters[selectedIndex].comparer);
+        renderStoryListing();
+    });
+
+    fetch('stories/resources/lookup-hash.txt')
+    .then((response) => response.text())
+    .then(initializeTagSearch);
 });

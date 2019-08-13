@@ -93,6 +93,7 @@
     margin: 0;
 }
 
+#content-body #search-input,
 #content-body .search-container {
     width: 100%;
 }

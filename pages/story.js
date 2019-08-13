@@ -231,7 +231,7 @@ $(document).ready(function () {
         renderStoryListing();
     });
 
-    splitterRegex = splitter_regex = [
+    let splitterRegex = splitter_regex = [
         '\\s',   // Space
         '\\-',   // Dash
         "\\'",   // Single quote

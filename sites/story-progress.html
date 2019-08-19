@@ -72,42 +72,61 @@
             background-color: rgba(255, 255, 255);
         }
 
-        html {
-            overflow-y: auto;
-        }
-
-        #content-body .navbar-placeholder {
+        .navbar-placeholder {
             height: 56px;
         }
 
-        #content-body {
-            min-height: auto;
-            height: calc(100vh - 40px);
+        .doc-container {
+            padding: 100px 12px 50px 12px;
+
+            display: flex;
+            justify-content: center;
         }
 
-        #content-body #doc-iframe {
+        .doc-container #doc-iframe {
             border: none;
             box-sizing: border-box;
-
-            margin: 0;
-            padding: 0;
-
+            
             width: 100%;
-            height: calc(100vh - 56px - 40px);
-        }
-
-        .page-footer {
-            border-top: none;
+            min-width: 300px;
+            max-width: 650px;
         }
     </style>
 
     <script>
+        function checkDocSizing() {
+            var iframe = $('#doc-iframe');
+            //iframe.height(iframe.get(0).contentDocument.children[0].offsetHeight);
+
+            var maxHeight = 0;
+            Array.from(iframe.get(0).contentDocument.children[0].children).forEach(elem => {
+                maxHeight = Math.max(maxHeight, elem.getBoundingClientRect().bottom);
+            });
+            iframe.height(maxHeight);
+        }
+
         function loadGoogleDocId() {
             var params = readUrlParams();
             window.params = params;
             var docId = params.get('id') || undefined;
             if (docId) {
-                $('#doc-iframe').attr('src', `https://docs.google.com/document/d/${docId}/preview`);
+                fetch(`https://docs.google.com/document/d/${docId}/export`)
+                .then(response => response.text())
+                .then(html => $('#doc-iframe').contents().find('html').html(html))
+                .then(() => {
+                    $('#doc-iframe').contents().find('html').append([
+                        '<style type="text/css">',
+                        '   * {',
+                        '       line-height: 1.43;',
+                        '   }',
+                        '</style>'
+                    ].join('\n'));
+
+                    checkDocSizing();
+                    $(window).resize(() => {
+                        checkDocSizing();
+                    });
+                });
             }
         }
 
@@ -155,10 +174,12 @@
 
     <div id="content-body">
         <div class="navbar-placeholder"></div>
-        <iframe id="doc-iframe"></iframe>
+        <div class="doc-container">
+            <iframe id="doc-iframe"></iframe>
+        </div>
 
         <div class="hidden">
-
+            
         </div>
     </div>
 

@@ -77,7 +77,7 @@
         }
 
         .doc-container {
-            padding: 100px 12px 50px 12px;
+            padding: 80px 12px 50px 12px;
 
             display: flex;
             justify-content: center;
@@ -96,7 +96,6 @@
     <script>
         function checkDocSizing() {
             var iframe = $('#doc-iframe');
-            //iframe.height(iframe.get(0).contentDocument.children[0].offsetHeight);
 
             var maxHeight = 0;
             Array.from(iframe.get(0).contentDocument.children[0].children).forEach(elem => {
@@ -111,18 +110,20 @@
             var docId = params.get('id') || undefined;
             if (docId) {
                 fetch(`https://docs.google.com/document/d/${docId}/export`)
-                .then(response => response.text())
-                .then(html => $('#doc-iframe').contents().find('html').html(html))
-                .then(() => {
-                    $('#doc-iframe').contents().find('html').append([
+                .then((response) => response.text())
+                .then((html) => {
+                    html = [
                         '<style type="text/css">',
-                        '   * {',
-                        '       line-height: 1.43;',
+                        '   p {',
+                        '       line-height: 1.43 !important;',
                         '   }',
                         '</style>'
-                    ].join('\n'));
+                    ].join('\n') + html;
 
+                    $('#doc-iframe').contents().find('html').html(html);
                     checkDocSizing();
+                    setTimeout(checkDocSizing, 300);
+
                     $(window).resize(() => {
                         checkDocSizing();
                     });

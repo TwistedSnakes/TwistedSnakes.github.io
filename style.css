@@ -248,7 +248,7 @@ input[type="text"] {
 }
 
 #content-body {
-    min-height: calc(100vh - 39px);
+    min-height: calc(100vh - 40px);
 }
 
 #content-body h1 {

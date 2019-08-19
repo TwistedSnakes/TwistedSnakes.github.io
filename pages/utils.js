@@ -22,6 +22,10 @@ $(document).ready(function () {
     updateNavbarCollapse();
 });
 
+function readUrlParams(urlSearch) {
+    return new URLSearchParams(urlSearch || window.location.search);
+}
+
 function initializeDropdown(selectContainer) {
     let originalSelectElement = selectContainer.getElementsByTagName('select')[0];
     let selectedIndex = originalSelectElement.selectedIndex;

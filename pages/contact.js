@@ -63,19 +63,19 @@ function initSocialPanels() {
 
 }
 
-$(window).scroll(() => {
-    checkNavbarOpacity();
-});
-
-$(window).resize(() => {
-    checkNavbarOpacity();
-    checkBannerImg();
-});
-
 $(document).ready(function() {
     checkNavbarOpacity();
     checkBannerImg();
     initSocialPanels();
+
+    $(window).scroll(() => {
+        checkNavbarOpacity();
+    });
     
+    $(window).resize(() => {
+        checkNavbarOpacity();
+        checkBannerImg();
+    });
+
     $('.banner-img').removeClass('hidden');
 });

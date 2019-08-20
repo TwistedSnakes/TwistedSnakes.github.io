@@ -94,6 +94,41 @@
     </style>
 
     <script>
+        function loadDoc(docId) {
+                return fetch(`https://docs.google.com/document/d/${docId}/export`)
+                .then((response) => response.text())
+                .then((html) => {
+                    html = [
+                        '<style type="text/css">',
+                        '   h1, h2, h3, h4, h5, h6 {',
+                        '       margin-block-start: auto;',
+                        '       margin-block-end: auto;',
+                        '   }',
+                        '',
+                        '   p {',
+                        '       line-height: 1.43 !important;',
+                        '   }',
+                        '</style>'
+                    ].join('\n') + html;
+                    $('#doc-iframe').contents().find('html').html(html);
+                    $('#doc-iframe').contents().find('hr').filter((_, elem) => {
+                        var elem$ = $(elem);
+                        return elem$.css('page-break-before') == 'always' &&
+                                elem$.css('display') == 'none';
+                    })
+                    .css('display', 'block')
+                    .css('border', 'none')
+                    .css('height', '80px');
+
+                    checkDocSizing();
+                    setTimeout(checkDocSizing, 500);
+
+                    $(window).resize(() => {
+                        checkDocSizing();
+                    });
+                });
+        }
+
         function checkDocSizing() {
             var iframe = $('#doc-iframe');
 
@@ -105,29 +140,15 @@
         }
 
         function loadGoogleDocId() {
+            $(window).resize(() => {
+                checkDocSizing();
+            });
+
             var params = readUrlParams();
             window.params = params;
             var docId = params.get('id') || undefined;
             if (docId) {
-                fetch(`https://docs.google.com/document/d/${docId}/export`)
-                .then((response) => response.text())
-                .then((html) => {
-                    html = [
-                        '<style type="text/css">',
-                        '   p {',
-                        '       line-height: 1.43 !important;',
-                        '   }',
-                        '</style>'
-                    ].join('\n') + html;
-
-                    $('#doc-iframe').contents().find('html').html(html);
-                    checkDocSizing();
-                    setTimeout(checkDocSizing, 300);
-
-                    $(window).resize(() => {
-                        checkDocSizing();
-                    });
-                });
+                loadDoc(docId);
             }
         }
 

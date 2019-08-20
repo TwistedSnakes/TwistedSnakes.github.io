@@ -17,18 +17,18 @@ function checkBannerImg() {
     $('.banner-img').css('left', leftPos);
 }
 
-$(window).scroll(() => {
-    checkNavbarOpacity();
-});
-
-$(window).resize(() => {
-    checkNavbarOpacity();
-    checkBannerImg();
-});
-
 $(document).ready(function() {
     checkNavbarOpacity();
     checkBannerImg();
+
+    $(window).scroll(() => {
+        checkNavbarOpacity();
+    });
+    
+    $(window).resize(() => {
+        checkNavbarOpacity();
+        checkBannerImg();
+    });
 
     $('.banner-img').removeClass('hidden');
 });

@@ -17,15 +17,6 @@ function checkBannerImg() {
     $('#content-body .banner-img').css('left', leftPos);
 }
 
-$(window).scroll(() => {
-    checkNavbarOpacity();
-});
-
-$(window).resize(() => {
-    checkNavbarOpacity();
-    checkBannerImg();
-});
-
 let allStorySorters = [
     { text: 'Sequence (Ascending)', comparer: compareStoriesById },
     { text: 'Sequence (Descending)', comparer: (a, b) => compareStoriesById(b, a) },
@@ -258,7 +249,8 @@ function initializeTagSearch(thumbprint) {
             sufficient: 100,
             prefetch: {
                 url: 'stories/resources/tag-lookup.json',
-                thumbprint
+                thumbprint,
+                cache: !!thumbprint
             },
             sorter: (a, b) => storyStorage.countTagInStories(b.tag) - storyStorage.countTagInStories(a.tag)
         }), tagObj => !storyStorage.isFilteredTag(tagObj.tag) && storyStorage.countTagInStories(tagObj.tag) > 0),
@@ -279,7 +271,8 @@ function initializeTagSearch(thumbprint) {
             sufficient: 100,
             prefetch: {
                 url: 'stories/resources/story-lookup.json',
-                thumbprint
+                thumbprint,
+                cache: !!thumbprint
             }
         }), storyObj => storyStorage.isStoryListed(storyObj.id)),
         limit: 5,
@@ -314,8 +307,18 @@ $(document).ready(function () {
     checkNavbarOpacity();
     checkBannerImg();
     checkTagDisplay();
-    $('.banner-img').removeClass('hidden');
     loadStoryListing();
+
+    $(window).scroll(() => {
+        checkNavbarOpacity();
+    });
+    
+    $(window).resize(() => {
+        checkNavbarOpacity();
+        checkBannerImg();
+    });
+
+    $('.banner-img').removeClass('hidden');
 
     $('#sort-select select').empty();
     allStorySorters.forEach((option) => {
@@ -330,6 +333,6 @@ $(document).ready(function () {
     });
 
     fetch('stories/resources/lookup-hash.txt')
-    .then((response) => response.text())
+    .then((response) => response.status == 200 ? response.text() : undefined)
     .then(initializeTagSearch);
 });

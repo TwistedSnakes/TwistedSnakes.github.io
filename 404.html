@@ -1,12 +1,133 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-y: auto;">
+
 <head>
-    <title>TwistedSnakes</title>
-    <meta charset="utf-8">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-144702134-1"></script>
     <script>
-        window.addEventListener('load', () => document.getElementsByTagName('body')[0].innerHTML = '404 page works!');
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-144702134-1');
     </script>
+
+    <title>404 Not Found | TwistedSnakes</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" type="image/x-icon" href="https://twistedsnakes.com/favicon.ico">
+
+    <!-- Basic Metadata -->
+    <meta name="description"
+        content="TwistedSnakes is a furry writer from Singapore! Find out more about his stories and commissions here!" />
+    <meta name="keywords" content="twistedsnakes twisted snakes author writer" />
+    <meta name="language" content="english" />
+    <meta name="copyright" content="TwistedSnakes" />
+    <meta name="distribution" content="global" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://twistedsnakes.com/" />
+    <meta property="og:title" content="TwistedSnakes" />
+    <meta property="og:description"
+        content="TwistedSnakes is a furry writer from Singapore! Find out more about his stories and commissions here!" />
+    <meta property="og:image" content="https://twistedsnakes.com/img/preview.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="588" />
+    <meta property="og:image:height" content="600" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:domain" content="twistedsnakes.com" />
+    <meta property="twitter:url" content="https://twistedsnakes.com/" />
+    <meta property="twitter:title" content="TwistedSnakes" />
+    <meta property="twitter:description"
+        content="TwistedSnakes is a furry writer from Singapore! Find out more about his stories and commissions here!" />
+    <meta property="twitter:image" content="/img/preview.jpg" />
+
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <link rel="stylesheet" type="text/css" href="/fonts.css">
+
+    <!-- Boostrap CSS -->
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+    <!-- JQuery -->
+    <script src="/lib/jquery-3.4.1.min.js"></script>
+    <!-- Boostrap JS -->
+    <script src="/lib/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <!-- Twitter Typeahead -->
+    <script src="/lib/typeahead-0.11.1.bundle.js"></script>
+
+    <!-- Story Utilities -->
+    <script src="/stories/resources/reader-utils.js"></script>
+
+    <!-- Page-loading Script -->
+    <script src="/pages/utils.js"></script>
+
 </head>
+
 <body>
+    <nav class="nav navbar navbar-expand-md fixed-top">
+        <div class="navbar-logo">
+            <a href="/">
+                <img src="/img/logo.svg" style="max-height:30px;" class="img-fluid">
+            </a>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown-logo">
+                    <a class="page-nav" href="/">
+                        <img src="/img/logo.svg" class="img-fluid" style="max-height:30px;">
+                    </a>
+                </li>
+                <li class="nav-item page-nav">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item page-nav">
+                    <a class="nav-link" href="/commission.html">Commission</a>
+                </li>
+                <li class="nav-item page-nav">
+                    <a class="nav-link" href="/story.html">Stories</a>
+                </li>
+                <li class="nav-item page-nav">
+                    <a class="nav-link" href="/contact.html">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="content-body">
+        <div class="block-white" style="height: calc(100vh - 40px); min-height: 600px;">
+            <div class="container" style="height: 100%;">
+                <div class="row px-4" style="height: 100%;">
+                    <div class="col-sm-4 order-sm-2 d-flex align-content-center justify-content-center">
+                        <div class="d-flex align-content-center justify-content-center"style="max-width: calc(50vw);">
+                            <img src="img/404-img.png" style="display: block; width: 100%; height: auto; object-fit: contain;">
+                        </div>
+                    </div>
+                    <div class="col-sm-8 order-sm-1 d-flex align-content-center justify-content-center">
+                        <div class="translate-center w-100">
+                            <h1 class="text-center p-0 my-3">Whoops!</h1>
+                            <p class="my-3">We seem to have reached a 404 error here. This means that the page you are looking for does not exist in this version of reality.</p>
+                            <p class="my-3">No worries! This simply means that you can use the navigation bar on top of the screen to choose where you want to go. Decide on the future and click on a link!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-footer d-flex justify-content-center align-items-center">
+        <p class="page-footer-message">© 2013-2019 TwistedSnakes</p>
+    </div>
 </body>
+
 </html>

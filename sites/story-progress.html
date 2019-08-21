@@ -111,6 +111,8 @@
                         '</style>'
                     ].join('\n') + html;
                     $('#doc-iframe').contents().find('html').html(html);
+
+                    // Change page break displays
                     $('#doc-iframe').contents().find('hr').filter((_, elem) => {
                         var elem$ = $(elem);
                         return elem$.css('page-break-before') == 'always' &&
@@ -119,6 +121,10 @@
                     .css('display', 'block')
                     .css('border', 'none')
                     .css('height', '80px');
+
+                    // Remove text after the "#end" tag
+                    $('#doc-iframe').contents().find(':contains("#end")').nextAll().remove();
+                    $('#doc-iframe').contents().find(':contains("#end")').last().remove();
 
                     checkDocSizing();
                     setTimeout(checkDocSizing, 500);

@@ -55,14 +55,18 @@ function initProgressPanels() {
             [90, '#FFA500'], // bright yellow
             [100, '#279270'], // green
         ].filter((colorPair) => colorPair[0] >= panelInfo.progress)[0][1]) || '#279270';
-        var newPanel = $($('.progress-panel-template').html());
+        const newPanel = $($('.progress-panel-template').html());
         newPanel.find('.progress-panel-icon').attr('src', panelInfo.icon)
         newPanel.find('.progress-panel-bar-value')
-            .css('width', `${panelInfo.progress}%`)
-            .css('background-color', color);
+            .css('background-color', color)
+            .css('width', '0%');
+        setTimeout(() => {
+            newPanel.find('.progress-panel-bar-value').animate({ width: `${panelInfo.progress}%` }, 700);
+        }, $('#content-body .project-progress-container').children().length * 300);
+            
         newPanel.find('.progress-panel-text').html(panelInfo.text);
         newPanel.find('.progress-panel-progress-value').html(`<p>${panelInfo.progressText}</p>`);
-        $(`#content-body ${panelContainerSelector}`).append(newPanel);
+        $('#content-body .project-progress-container').append(newPanel);
     }
 
     var url = 'https://docs.google.com/document/d/1Tv9nr8eINZ1dPQK_TTj7XDRYphcPpQhF6xyMB3QQnRg/export?format=html';
@@ -97,7 +101,7 @@ function initProgressPanels() {
         $('#content-body .project-progress-container').empty();
         if (progressEntries.length > 0) {
             progressEntries.forEach((progressEntry) => {
-                addPanel(progressEntry, '.project-progress-container');
+                addPanel(progressEntry);
             });
         } else {
             $('#content-body .project-progress-container').html($('.progress-panel-empty-template').html());

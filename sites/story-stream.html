@@ -15,7 +15,7 @@
         gtag('config', 'UA-144702134-1');
     </script>
 
-    <title>Story Progress | TwistedSnakes</title>
+    <title>Story Stream | TwistedSnakes</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -68,6 +68,10 @@
     <script src="/pages/utils.js"></script>
 
     <style>
+        html {
+            overflow-y: hidden;
+        }
+
         .nav {
             background-color: rgba(255, 255, 255);
         }
@@ -77,8 +81,6 @@
         }
 
         .doc-container {
-            padding: 80px 12px 50px 12px;
-
             display: flex;
             justify-content: center;
         }
@@ -88,68 +90,15 @@
             box-sizing: border-box;
             
             width: 100%;
-            min-width: 300px;
-            max-width: 650px;
+            height: calc(100vh - 56px - 40px); /* Minus header and footer height */
         }
     </style>
 
     <script>
         function loadDoc(docId) {
-            return fetch(`https://docs.google.com/document/d/${docId}/export`)
-                .then((response) => response.text())
-                .then((html) => {
-                    html = [
-                        '<style type="text/css">',
-                        '   h1, h2, h3, h4, h5, h6 {',
-                        '       margin-block-start: auto;',
-                        '       margin-block-end: auto;',
-                        '   }',
-                        '',
-                        '   p {',
-                        '       line-height: 1.43 !important;',
-                        '   }',
-                        '</style>'
-                    ].join('\n') + html;
-                    $('#doc-iframe').contents().find('html').html(html);
-
-                    // Change page break displays
-                    $('#doc-iframe').contents().find('hr').filter((_, elem) => {
-                        var elem$ = $(elem);
-                        return elem$.css('page-break-before') == 'always' &&
-                                elem$.css('display') == 'none';
-                    })
-                    .css('display', 'block')
-                    .css('border', 'none')
-                    .css('height', '80px');
-
-                    // Remove text after the "#end" tag
-                    $('#doc-iframe').contents().find(':contains("#end")').nextAll().remove();
-                    $('#doc-iframe').contents().find(':contains("#end")').last().remove();
-
-                    checkDocSizing();
-                    setTimeout(checkDocSizing, 500);
-
-                    $(window).resize(() => {
-                        checkDocSizing();
-                    });
-                });
+            $('#doc-iframe').attr('src', `https://docs.google.com/document/d/${docId}/edit?rm=minimal`);
         }
-
-        function checkDocSizing() {
-            var iframe = $('#doc-iframe');
-
-            var maxHeight = 0;
-            Array.from(iframe.get(0).contentDocument.children[0].children).forEach(elem => {
-                maxHeight = Math.max(maxHeight, elem.getBoundingClientRect().bottom);
-            });
-            iframe.height(maxHeight);
-        }
-
         function loadGoogleDocId() {
-            $(window).resize(() => {
-                checkDocSizing();
-            });
-
             var params = readUrlParams();
             window.params = params;
             var docId = params.get('id') || undefined;
